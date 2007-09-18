@@ -1,16 +1,15 @@
 Package: Synth
-Version: 0.1-2
-Date: 2007-01-20
-Title: Causal Inference using the Synthetic Control Group Method 
+Version: 0.1-3
+Date: 2007-09-18
+Title: Synthetic Control Group Method for Comparative Case Studies
 Author: Alexis Diamond <adiamond@fas.harvard.edu> and 
 	Jens Hainmueller <jhainm@fas.harvard.edu>
 Maintainer: Jens Hainmueller <jhainm@fas.harvard.edu>
-Description: Implements causal inference using the synthetic control group
-	method of Abadie and Gardeazabal (2003) and Abadie, Diamond,
+Description: Implements the synthetic control group 
+	method for comparative case studies developed in Abadie and Gardeazabal (2003) and Abadie, Diamond,
 	Hainmueller (2007). 
-Depends: kernlab
-Suggests: 
-License: GPL2 or newer as long as authorship of this code is made
-        clear
+Depends: kernlab 
+Suggests: rgenoud
+License: GPL-2 (sic)
 URL: http://www.people.fas.harvard.edu/~jhainm/
-Packaged: Thu Feb  1 14:52:57 2007; adiamond
+Packaged: Sat Sep 22 13:01:00 2007; jhainm

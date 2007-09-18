@@ -8,7 +8,7 @@
 
 \usage{fn.V(variables.v = stop("variables.v missing"), 
 X0.scaled = stop("X0.scaled missing"), X1.scaled = stop("X0.scaled missing"), 
-Z0 = stop("Z0 missing"), Z1 = stop("Z1 missing"), margin.ipop = 0.0005, sigf.ipop = 4, bound.ipop = 10, ...)
+Z0 = stop("Z0 missing"), Z1 = stop("Z1 missing"), margin.ipop = 0.0005, sigf.ipop = 5, bound.ipop = 10, ...)
 
 }
 \arguments{

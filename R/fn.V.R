@@ -1,3 +1,4 @@
+# Function fn.V: JH 9/20/07
 "fn.V" <-
 
   function(
@@ -7,7 +8,7 @@
            Z0 = stop("Z0 missing"),
            Z1 = stop("Z1 missing"),
            margin.ipop = 0.0005,
-           sigf.ipop = 4,
+           sigf.ipop = 5,
            bound.ipop = 10,...
            )
 

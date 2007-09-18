@@ -46,7 +46,7 @@ function(
                       }
                                                         
                      plot(
-                          dataprep.res$tag$y.plot,
+                          dataprep.res$tag$time.plot,
                           gap,
                           t="l",
                           col="black",

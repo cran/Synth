@@ -50,7 +50,7 @@ path.plot <-
                               
                       
                      plot(
-                      dataprep.res$tag$y.plot
+                      dataprep.res$tag$time.plot
                      ,dataprep.res$Y1plot,
                      t="l",
                      col="black",
@@ -60,7 +60,7 @@ path.plot <-
                      xlab=Xlab,xaxs="i",yaxs="i",ylim=Ylim)
                      
                      lines(
-                           dataprep.res$tag$y.plot,
+                           dataprep.res$tag$time.plot,
                            y0plot1 ,
                            col="black",
                            lty="dashed",

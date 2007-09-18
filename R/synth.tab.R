@@ -1,4 +1,6 @@
-synth.tab <-
+# Function Synth.tab: JH 9/23/07
+
+"synth.tab" <-
  
   function(
            synth.res    = NA,
@@ -12,7 +14,7 @@ synth.tab <-
      {
       stop(
             "\n\n#####################################################",
-            "\n Not synth.res provided\n\n)"
+            "\n No synth.res provided\n\n)"
             )
      }
      
@@ -20,7 +22,7 @@ synth.tab <-
      {
       stop(
             "\n\n#####################################################",
-            "\n Not dataprep.res provided\n\n)"
+            "\n No dataprep.res provided\n\n)"
             )
      }
      

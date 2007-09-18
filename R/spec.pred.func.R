@@ -24,9 +24,25 @@ spec.pred.func <- function(
         list.object[[1]] <- which(names(foo.object) == list.object[[1]])
       }
 
+    # create predictor name:
     name.predictor <- names(foo.object)[list.object[[1]]]
+    if(length(list.object[[2]])>1)
+      {
+      name.predictor <-
+      paste("special.", name.predictor, ".",
+            paste(list.object[[2]][1],".",
+                  list.object[[2]][length(list.object[[2]])]
+                                  , sep = ""), sep = "")
 
-    X1.special <- as.matrix(foo.object[
+      } else {
+
+      name.predictor <-
+      paste("special.", name.predictor, ".",
+            paste(list.object[[2]]
+            , sep = ""), sep = "")
+      }
+
+      X1.special <- as.matrix(foo.object[
                                        intersect(
                                                  special.units.tr,
                                                  special.times
@@ -35,37 +51,41 @@ spec.pred.func <- function(
                                        ]
                             )
 
-    row.names(X1.special) <-
+    rownames(X1.special) <-
       foo.object[
                  intersect(special.units.tr, special.times),
                  time.var
                  ]
+    colnames(X1.special) <- tr.numb
 
+   # deep missing checker:
+    for(i in 1:ncol(X1.special))
+     {
+       if(sum(is.na(X1.special[,i])) == nrow(X1.special))
+        {stop(paste("\n special predictor",name.predictor,"has missing data for all periods in time.predictors.prior\n"))}
 
-    if(sum(is.na(X1.special)) > 0)
+      for(j in 1:nrow(X1.special))
+       {
+         if(is.na(X1.special[j,i])){
+         cat(paste("\n Missing data: treated unit; special predictor:",name.predictor,"; for period:",rownames(X1.special)[j],
+         "\n","We ignore (na.rm = TRUE) all missing values for predictors.op.\n"))}
+       }
+     }
+
+    # aggregate if only one time period is there
+    if(length(list.object[[2]]) > 1)
       {
-        cat(
-            "\n\n######################################################",
-             "\nYou have missing data in treated special predictor vars!",
-             "\nWe ignore (na.rm = TRUE) missingness when we perform operations",
-             "\nYou may want to reexamine your data!\n"
-             )
-      }
-
-    
-    if(is.na(list.object[[3]]) == TRUE)
-      {
-        X1.inner <- rbind(X1.inner, X1.special)
-      } else {
-        X1.special <- apply(X1.special,
+       X1.special <- apply(X1.special,
                             2,
                             paste(list.object[[3]]),
                             na.rm = TRUE
                             )
-        
-        X1.inner <- rbind(X1.inner, X1.special)
       }
+    X1.special <- t(as.matrix(X1.special))
+    X1.inner <- rbind(X1.inner, X1.special)
+    rownames(X1.inner)[nrow(X1.inner)] <- name.predictor
 
+   # controls
     X0.special <-
       as.matrix(foo.object[intersect(
                                      special.units.co,
@@ -85,67 +105,39 @@ spec.pred.func <- function(
 
     colnames(X0.special) <- co.numb
 
-    if(sum(is.na(X0.special)) > 0)
-      {
-        cat(
-            "\n\n######################################################",
-             "\nYou have missing data in control special predictor vars!",
-             "\nWe ignore (na.rm = TRUE) missingness when we perform operations",
-             "\nYou may want to reexamine your data!\n"
-             )
-      }
+    # deep missing checker:
+    for(i in 1:ncol(X0.special))
+     {
+      if(sum(is.na(X0.special[,i])) == nrow(X0.special))
+       {stop(paste("\n control unit:",co.numb[i],"; special predictor:",name.predictor,"has missing data for all periods specified:",list.object[[2]],"\n"))}
 
-    # Continue with object creation           
-    if(is.na(list.object[[3]]) == TRUE)
+       for(j in 1:nrow(X0.special))
+       {
+         if(is.na(X0.special[j,i])){
+         cat(paste("\n Missing data - control unit:",co.numb[i],"; special predictor:",name.predictor,"; for period:",rownames(X0.special)[j],
+         "\n","We ignore (na.rm = TRUE) all missing values for predictors.op.\n"))}
+       }
+     }
 
-      {
-        XO.inner <- rbind(X0.inner, X0.special)
-      } else {
+    # Continue with object creation
+    if(length(list.object[[2]]) > 1)
+     {
         X0.special <- apply(
                             X0.special,
                             2,
                             paste(list.object[[3]]),
                             na.rm = TRUE
                             )
-
+                            
         X0.special <- t(as.matrix(X0.special))
-        X0.inner <- rbind(X0.inner,
-                          X0.special
-                          )
-      }
+     }
 
-    if(length(list.object[[2]])>1)
-      {
-      row.names(X1.inner)[length(row.names(X1.inner))] <-
-      paste("special.", name.predictor, ".",
-            paste(list.object[[2]][1],".",
-                  list.object[[2]][length(list.object[[2]])]
-                                  , sep = ""), sep = "")
-      
-      } else {    
+    X0.inner <- rbind(X0.inner,X0.special)
+    rownames(X0.inner)[nrow(X0.inner)] <- name.predictor
 
-      row.names(X1.inner)[length(row.names(X1.inner))] <-
-      paste("special.", name.predictor, ".",
-            paste(list.object[[2]]
-            , sep = ""), sep = "")
-      }
-      
-   if(length(list.object[[2]])>1)
-      {
-      row.names(X0.inner)[length(row.names(X0.inner))] <-
-      paste("special.", name.predictor, ".",
-            paste(list.object[[2]][1],".",
-            list.object[[2]][length(list.object[[2]])]
-            , sep = ""), sep = "")
-      
-      } else {
 
-      row.names(X0.inner)[length(row.names(X0.inner))] <-
-      paste("special.", name.predictor, ".",
-            paste(list.object[[2]], sep = ""), sep = "")
 
-      }
-    
+
     # Prepare output
     special.output <- list(X0.inner = X0.inner,
                            X1.inner = X1.inner

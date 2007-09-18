@@ -1,12 +1,12 @@
 \name{dataprep}
 \alias{dataprep}
-\title{Extracts Matrices from Panel Dataset to be Loaded into synth()}
+\title{Constructs a list of matrices from panel dataset to be loaded into synth()}
 \description{
-             Function that takes a standard panel dataset and produces 
-	     data objects necessary for running \code{\link{synth}}
-	     and other "Synth" package functions to construct
+The \code{\link{synth}} function takes a standard panel dataset and produces 
+	     a list of data objects necessary for running \code{\link{synth}}
+	     and other Synth package functions to construct
            synthetic control groups according to the methods outlined in 
-           Abadie and Gardeazabal (2003) and Abadie, Diamond, Hainmueller (2007) (see references and example).
+           Abadie and Gardeazabal (2003) and Abadie, Diamond, Hainmueller (2007) (see references and example). 
 
 	     User supplies a dataframe ("foo"), chooses predictors,
 	     special predictors (explained below), the operators that
@@ -18,16 +18,15 @@
 	     the time-period over which to optimize,
 	     and the time-period over which outcome data should be plotted.
 	     
-	     The output of \code{dataprep} contains  list of matrixes to 
-	     be loaded into \code{\link{synth}}.
-  
+	     The output of \code{\link{dataprep}} contains a list of matrices. This list object can be
+directly loaded into \code{\link{synth}}. 
 }
 \usage{dataprep(foo = NULL, predictors = NULL,
-          predictors.op = "mean", special.predictors = NA,
+          predictors.op = "mean", special.predictors = NULL,
           dependent = NULL, unit.variable = NULL,
           time.variable = NULL, treatment.identifier = NULL,
           controls.identifier = NULL, time.predictors.prior = NULL,
-          time.optimize.ssr = NULL, y.plot = time.optimize.ssr,
+          time.optimize.ssr = NULL, time.plot = time.optimize.ssr,
           unit.names.variable = NA)
 }
 
@@ -35,29 +34,29 @@
   \item{foo}{The dataframe with the panel data.}
 
   \item{predictors}{A vector of column numbers or column-name character
-    strings that identifies the predictors' columns.}
+    strings that identifies the predictors' columns. All predictors have to be numeric.}
   \item{predictors.op}{A character string identifying the method (operator) to be used
     on the predictors.  Default is "mean". rm.na = T is hardwired into
     the code. See *Details*.}
-  \item{special.predictors}{A list object identifying additional predictors and
+  \item{special.predictors}{A list object identifying additional numeric predictors and
     their associated pre-treatment years and operators (analagous to
     ``predictors.op'' above).  See *Details*.}
   \item{dependent}{A scalar identifying the column number or column-name character string
-    that corresponds to the dependent (outcome) variable.}
+    that corresponds to the numeric dependent (outcome) variable.}
   \item{unit.variable}{A scalar identifying the column number or column-name character string
-    associated unit numbers.}
+    associated unit numbers. The unit.varibale has to be numeric.}
   \item{time.variable}{A scalar identifying column number or column-name character string
-    associated with period (time) data.} 
+    associated with period (time) data. The time variable has to be numeric.} 
   \item{treatment.identifier}{A scalar identifying the ``unit.variable'' number or a character string
-    giving the ``unit.name ''of the treated unit.}
+    giving the ``unit.name ''of the treated unit. If a charater is supplied, a unit.names.variable also has to be supplied to identify the treated unit.}
   \item{controls.identifier }{ A scalar identifying the ``unit.variable'' numbers or a vector of
-    character strings giving the ``unit.name''s of control units.}
-  \item{time.predictors.prior }{A vector identifying the pretreatment years for predictors.}
-  \item{time.optimize.ssr}{A vector identifying the years of the dependent variable over which the loss function 
-should be minimized (i.e. the years over which the sum of squared residuals between treated and the syntehtic conrol unit are minimzed.}
-  \item{y.plot}{A vector identifying the years over which results are to be plotted
+    character strings giving the ``unit.name''s of control units. If a charater is supplied, a unit.names.variable also has to be supplied to identify the control units unit.}
+  \item{time.predictors.prior }{A numeric vector identifying the pretreatment periods over which the values for the outcome predictors should be averaged.}
+  \item{time.optimize.ssr}{A numeric vector identifying the periods of the dependent variable over which the loss function 
+should be minimized (i.e. the periods over which mean squared prediction error (MSPE) , that is the sum of squared residuals between treated and the synthetic conrol unit, are minimzed.}
+  \item{time.plot}{A vector identifying the periods over which results are to be plotted
     with \code{\link{gaps.plot}} and \code{\link{path.plot}}.}
-  \item{unit.names.variable}{A scalar or column-name character string identifying the column with the names of the units.
+  \item{unit.names.variable}{A scalar or column-name character string identifying the column with the names of the units. This variable has to be of mode character. 
   }
 }
 \details{ The predictors.op argument is a character string that provides a
@@ -65,7 +64,7 @@ should be minimized (i.e. the years over which the sum of squared residuals betw
   operator to be applied to the predictors over the given time period. 
 
   The special.predictors argument is a list object that contains one or
-  more lists of length = 3.  The components of each of these lists are:
+  more lists of length = 3.  The required components of each of these lists are:
 
   (a) scalar column number associated with that predictor
   (b) vector of time-period number(s) desired (eg., 1998:2003)
@@ -74,32 +73,38 @@ should be minimized (i.e. the years over which the sum of squared residuals betw
 
   eg.,
   special.predictors <- list(listc(x1, 1990:2000, "mean"),
-                             listc(x2, 1980:2000, "median")
+                             listc(x2, 1980:1983, "median"),
+                             listc(x3, 1980, "mean")   
                              )
+  
+  indicates that predictor x1, should be used with its values averaged over periods 1990:2000; 
+predicator x2 should be used with its median values over periods 1980:1983; x3 should be used with the values from period 1980 only.
+
 }
 \value{ 
-  \item{X0}{matrix of controls' predictor data. nrows = number of predictors & special predictors.
-    ncols = number of control units
+
+  \item{X1}{matrix of treated predictor data.
+    nrows = number of predictors and (possibly) special predictors. ncols = one.
   }
 
-  \item{X1}{vector of treated predictor data.
-    length = number of predictors & special predictors
+  \item{X0}{matrix of controls' predictor data. nrows = number of predictors and (possibly) special predictors. ncols = number of control units.
   }
 
-  \item{Z0}{matrix of controls' outcome data.
-    nrows = number of pre-treatment years
-    ncols = number of control units
+
+  \item{Z1}{matrix of treated outcome data for the pre-treatment periods over which MSPE is to be minimized. nrows = number of pre-treatment periods. ncols = one.
   }
 
-  \item{Z1}{vector of treated predictor data.
-    length = number of pre-treatment years
+  \item{Z0}{matrix of controls' outcome data for the pre-treatment periods over which MSPE is to be minimized.
+    nrows = number of pre-treatment periods.
+    ncols = number of control units.
   }
 
-  \item{Y0plot}{matrix of outcomes for control units
+  \item{Y1plot}{matrix of outcome data for treated unit to be used for results plotting. nrows = number of periods. ncols = one.
   }
 
-  \item{Y1plot}{vector of outcomes for treated unit
+  \item{Y0plot}{matrix of outcome data for control units to be used for results plotting. nrows = number of periods. ncols = number of control units. 
   }
+
 
   \item{names.and.numbers}{dataframe with two columns showing all unit numbers and
     corresponding unit names.
@@ -165,7 +170,7 @@ data(synth.data)
                            time.predictors.prior = c(1984:1989),
                            time.optimize.ssr = c(1984:1990),
                            unit.names.variable = "name",
-                           y.plot = 1984:1996
+                           time.plot = 1984:1996
                            )
 
 
@@ -176,6 +181,26 @@ data(synth.data)
 synth.out <- synth(dataprep.out,method = "BFGS")
 
 ## then we want to summarize the results, both numerically and graphically
+## there are two ways to summarzie the results
+## we can either access the output from synth.out directly
+## eg.
+synth.out$solution.w 
+# contains the unit weights or
+synth.out$solution.v 
+## contains the predictor weights. 
+
+## the output from synth opt can be flexibly combined with 
+## the output from dataprep to compute other quatities of interest
+## for example, the preriod by preriod discrepancies between the 
+## treated unit and its synthetic control unit
+## can be computed by typing
+gaps<-dataprep.out$Y1plot-(
+                           dataprep.out$Y0plot
+                           \%*\%
+                           synth.out$solution.w
+                           ) ; gaps
+
+## the Synth package also offers three convenience functions to summarize results.
 ## to get summary tables for all information 
 ## (V and W weights plus balance btw. treated and synthtic control) use the 
 ## synth.tab() command
@@ -191,6 +216,8 @@ path.plot(dataprep.res = dataprep.out,synth.res = synth.out)
 
 ## plot the gaps (treated - synthetic)
 gaps.plot(dataprep.res = dataprep.out,synth.res = synth.out)
+
+
 
 ## Second example: The economic impact of terrorism in the
 ## Basque country using data from Abadie and Gardeazabal (2003)
@@ -226,7 +253,7 @@ dataprep.out <-
                            ,time.predictors.prior = c(1964:1969)
                            ,time.optimize.ssr     = c(1960:1969)
                            ,unit.names.variable   = c("regionname")
-                           ,y.plot                = c(1955:1997) 
+                           ,time.plot                = c(1955:1997) 
                            )
 
 # 1. combine highest and second highest schooling category and eliminate highest category

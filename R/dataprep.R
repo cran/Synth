@@ -1,10 +1,11 @@
+# Function Dataprep: JH 9/18/07
 dataprep<-
 
   function(
                         foo = NULL,
                         predictors = NULL,
                         predictors.op = "mean",
-                        special.predictors = NA,
+                        special.predictors = NULL,
                         dependent = NULL,
                         unit.variable = NULL,
                         time.variable = NULL,
@@ -12,223 +13,185 @@ dataprep<-
                         controls.identifier = NULL,
                         time.predictors.prior = NULL,
                         time.optimize.ssr = NULL,
-                        y.plot = time.optimize.ssr,
+                        time.plot = time.optimize.ssr,
                         unit.names.variable = NA
                         )
   
   {
 
-    ##############################################################
-    # identify the unit.variable and time.variable
-    # if given by a character instead of a column number
-    if(mode(unit.variable) == "character")
-      {
-       if(sum(which(names(foo) == unit.variable)) <= 0)
-          {
-           stop("\n Unit.variable not found in data.\n")
-           }
-       unit.variable <- which(names(foo) == unit.variable)
-      }
+    if(is.data.frame(foo) == FALSE ){stop("\n No data.frame supplied in foo.\n")}
 
-    if(mode(time.variable) == "character")
-      {
-       if(sum(which(names(foo) == time.variable)) <= 0)
-          {
-           stop("\n Time.variable not found in data.\n")
-           }    
-       time.variable <- which(names(foo) == time.variable)
-      }
+    # identify unit.variable
+    if(mode(unit.variable) == "character"){unit.variable<-which(names(foo)==unit.variable)}
+    if(is.null(unit.variable) == TRUE ||  mode(foo[,unit.variable])!="numeric")
+      { stop("\n unit.variable not found as numeric variable in foo.\n")}
+    if(length(unit.variable)!=1){stop("\ Please specify only one unit.variable\n")}
 
-    # identify the predictors if given by characters, not numbers
-    if(mode(predictors) == "character")
+    # identify time.variable
+    if(mode(time.variable) == "character"){time.variable<-which(names(foo)==time.variable)}
+    if(is.null(time.variable) == TRUE || mode(foo[,time.variable])!="numeric" )
       {
-       if(length(which(is.element(names(foo), predictors))) != length(predictors))
-          {
-           stop("\n At least one predictor not found in data. Check predcitors vector.\n")
-           }
-       predictors <- which(is.element(names(foo), predictors))    
+       stop("\n time.variable not found as numeric variable in foo.\n")
       }
-
-    for(i in predictors)
+     if(length(time.variable)!=1){stop("\ Please specify only one time.variable\n")}
+    # identify units
+     # check if unit.name var is there (required if any identifier is given as character)
+     if(
+        mode(treatment.identifier) == "character" ||
+        mode(controls.identifier)  == "character" ||
+        is.na(unit.names.variable) == FALSE
+        )
       {
-        if(mode(foo[,i]) == "character")
-          {
-            stop(
-                "\n One of your predictors is a character! Make it numeric.\n"
-                )
+       if(mode(unit.names.variable) == "character")
+         {unit.names.variable<-which(names(foo)==unit.names.variable)}
+       if(is.na(unit.names.variable) == TRUE || mode(foo[,unit.names.variable])!="character")
+         {stop("\n unit.names.variable not found as character variable in foo.\n")}
+      }
+     # check treated
+     if(length(treatment.identifier) != 1){stop("\n please specify a single treated unit\n")}
+     if(mode(treatment.identifier) == "character")
+      {
+       if(treatment.identifier %in% foo[,unit.names.variable] == FALSE  )
+        {stop("\n treated unit not found in unit.names.variable.\n")}
+       tr.id = unique(foo[foo[,unit.names.variable] == treatment.identifier,unit.variable])
+       if(length(tr.id)!=1)
+         {stop(paste("\n treatment unit name",treatment.identifier,"refers to multiple numbers in unit.variable"))}
+       treatment.identifier.name = treatment.identifier
+       treatment.identifier = tr.id
+      } else {
+       if(treatment.identifier %in% foo[,unit.variable] == FALSE )
+        {stop("\n treated unit not found in unit.variable.\n")}
+        if(is.na(unit.names.variable) == TRUE )
+         {
+           treatment.identifier.name = treatment.identifier
+          } else {
+           treatment.identifier.name = unique(foo[treatment.identifier==foo[,unit.variable],unit.names.variable])
+           if(length(treatment.identifier.name)>1)
+            {stop("\n treatment.identifier refers to multiple names in unit.names.variable")}
           }
-        foo[,i] <- as.numeric(as.character(foo[,i]))
       }
-        
 
-    # identify special predictors in the same way
-    for(i in 1:length(special.predictors))
-      {
-        if(sum(is.element(names(foo), special.predictors[[i]][1])) > 0)
+     # check controls
+     if(length(controls.identifier) < 2 ){stop("\n please specify at least two control units\n")}
+     if(sum(duplicated(controls.identifier))>0)
+      {stop("\n duplicate control units in controls.identifier\n")}
+     if(mode(controls.identifier) == "character")
+       { co.store <- c()
+         for(i in controls.identifier)
           {
-            special.predictors[[i]][1] <-
-              which(names(foo) == special.predictors[[i]][1])
-          } else { 
-                  stop(
-                       "\n","Your special predictor ", special.predictors[[i]][1]," is not found in the data",".\n"
-                       ) 
+            if(i %in% foo[,unit.names.variable] == FALSE )
+             {stop(paste("\n control unit",i,"not found in unit.names.variable"))}
+            co.id = unique(foo[foo[,unit.names.variable] == i,unit.variable])
+            if(length(co.id) != 1)
+             {stop(paste("\n control unit name",i," refers to multiple numbers in unit.variable"))}
+            co.store <- c(co.store,co.id)
           }
+         controls.identifier.name = controls.identifier
+         controls.identifier = co.store
+        } else {
+         co.store <- c()
+         for(i in controls.identifier)
+          {
+            if(i %in% foo[,unit.variable] == FALSE )
+             {stop(paste("\n control unit",i,"not found in unit.variable"))}
+            if(is.na(unit.names.variable) == FALSE )
+            {
+             co.id = unique(foo[foo[,unit.variable] == i,unit.names.variable])
+             if(length(co.id) != 1)
+              {stop(paste("\n control unit number",i," refers to multiple names in unit.names.variable"))}
+             co.store <- c(co.store,co.id)
+             }
+          }
+         if(is.na(unit.names.variable) == FALSE )
+          {
+           controls.identifier.name = co.store
+         } else {
+           controls.identifier.name = controls.identifier
+         }
         }
 
-    # if the unit.names.variable is given as a character, convt to colnumber
-    if(mode(unit.names.variable) == "character")
-      { 
-        if(sum(which(names(foo) == unit.names.variable)) <= 0)
-          {
-            stop(
-                "\n Your unit.names.variable is not found in data.\n"
-                )
-          }
-        unit.names.variable <- which(names(foo) == unit.names.variable)
-       }
+        # more checks
+        if(treatment.identifier.name %in% controls.identifier.name)
+         {stop("\n treated unit among controls\n")}
+         
+        if(sum(duplicated(c(controls.identifier.name,treatment.identifier.name))) > 0)
+         {stop("n duplicate unit.variable.names across units\n")}
+         
+        # sort first by unit, then by time variable
+         foo[,time.variable] <- as.numeric(as.character(foo[,time.variable]))
+         foo[,unit.variable] <- as.numeric(as.character(foo[,unit.variable]))
+         foo <- foo[order(foo[,unit.variable], foo[,time.variable]),]
 
-    ########################################################################
-    # sort first by unit, then by time variable
+      # Get rows
+       treatment.rows <- which(foo[,unit.variable] %in% treatment.identifier)
+       control.rows   <- which(foo[,unit.variable] %in% controls.identifier)
 
-    foo[,time.variable] <- as.numeric(as.character(foo[,time.variable]))
-    foo[,unit.variable] <- as.numeric(as.character(foo[,unit.variable]))
-    foo <- foo[order(foo[,unit.variable], foo[,time.variable]),]
-
-#    if(unique(table(foo[,unit.variable], foo[,time.variable])) != 1)
-#      {
-#        stop("Your panel is unbalanced (units, times). Balance units & times.")
-#      }
-      
-      
-    ########################################################################
-    # If we have unit names,
-    # construct a dataframe with unit names and corresponding numbers
-
-    if(is.na(unit.names.variable) == TRUE) {
-      names.and.numbers <-
-        as.data.frame(
-                      cbind(
-                            rep(NA, length(unique(
-                                                  foo[,unit.variable]
-                                                  )
-                                           )
-                                ),
-                            unique(
-                                   as.numeric(foo[,unit.variable])
-                                   )
-                            )
-                      )
-
-      
-
-      names(names.and.numbers) <- c(
-                                    "unit.names",
-                                    "unit.numbers"
-                                    )
-    } else {
-      unit.names <-
-        unique(
-               as.character(foo[,unit.names.variable])
-               )
-
-      unit.numbers <- unique(
-                             as.numeric(foo[,unit.variable])
-                             )
-
-      names.and.numbers <- as.data.frame(
-                                         cbind(
-                                               unit.names,
-                                               unit.numbers
-                                               )
-                                         )
-
-      names.and.numbers[,2] <- as.numeric(as.character(names.and.numbers[,2]))
-
-      names(names.and.numbers) <- c(
-                                    "unit.names",
-                                    "unit.numbers"
-                                    )
-
-    }
-
-    
-    ################################################################
-    # Identify important rows and cols (treated, control units, etc.)
-
-    if(mode(treatment.identifier) == "character")
-      {
-        if(is.na(unit.names.variable) == TRUE)
-          {stop
-           ("\n Supply unit-names vect if tmt.identifier is a character! \n")}
-        treatment.identifier <-
-          which(names.and.numbers[,1] == treatment.identifier)
-        treatment.identifier <- names.and.numbers[treatment.identifier,2]
-      }
-
-    if(mode(controls.identifier) == "character")
-      {
-        if(is.na(unit.names.variable) == TRUE)
-          {stop
-           ("\n Supply unit-names vector if controls.id is a character! \n")}
-        controls.identifier <-
-          is.element(names.and.numbers[,1], controls.identifier)
-        controls.identifier <- names.and.numbers[controls.identifier,2]
-      }
-
-
-    # eliminate rows in names.and.numbers that we don't use
-     all.units <- c(treatment.identifier, controls.identifier)
-
-     names.and.numbers <- 
-              names.and.numbers[is.element(names.and.numbers[,2], all.units),]
-        
- 
-   # Get rows
-    treatment.rows <- which(foo[,unit.variable] == treatment.identifier)
-    
-    if(length(treatment.rows) == 0)
-      {
-      stop("\nTreated unit not in the dataset!\n")
-      }      
-    
-    control.rows <-
-      which(is.element(foo[,unit.variable], controls.identifier) == TRUE)
-
-    if(length(control.rows) == 0)
-      {
-      stop("\nControl units not not in the dataset!\n")
-      }
-
-    if(length(intersect(treatment.rows, control.rows))>0)
-      {
-      stop("\nTreated unit is among the controls!\n")
-      }      
-
-
-     if(unique(
+      # check if panel is unbalanced  (possible cases where this too restrictive, but imposes discipline)
+           if(unique(
                   table(
-                        foo[
-                            c(control.rows,treatment.rows)
-                            ,unit.variable],
-                        foo[
-                            c(control.rows,treatment.rows)
-                            ,time.variable])
+                        foo[c(control.rows,treatment.rows),unit.variable],
+                        foo[c(control.rows,treatment.rows),time.variable])
                             ) != 1)
       {
-        stop("Your panel is unbalanced (units, times). Balance units & times.")
+        stop("\nYour panel is unbalanced (units, times). Balance units & times.\n")
       }
-   
-    time.predictors.prior.rows <-
-      which(is.element(foo[,time.variable], time.predictors.prior) == TRUE)
 
-    time.optimize.ssr.rows <-
-      which(is.element(foo[,time.variable], time.optimize.ssr ) == TRUE)
+     # Now check and get time identifiers
+      if(sum(is.null(time.predictors.prior))> 0)
+       {stop("time.predictors.prior missing")}
+      if(sum(is.null(time.optimize.ssr))>0)
+       {stop("time.optimize.ssr missing")}
+      if(sum(is.null(time.plot))>0)
+       {stop("time.plot missing")}
+       
+      t.list <- list(time.predictors.prior,time.optimize.ssr,time.plot)
+      names(t.list) <- c("predictors.prior","optimize.ssr","plot")
+      for(i in 1:3)
+       {
+        if(mode(t.list[[i]]) != "numeric")
+         {stop(paste("\n time",names(t.list[i]),"must be numeric\n"))}
+        if(sum(duplicated(t.list[[i]]))>0)
+         {stop(paste("\n duplicates in time",names(t.list[i]),"\n"))}
+        if(length(t.list[[i]]) < 1)
+         {stop(paste("\n specificy at least one period in time",names(t.list[i]),"\n"))}
+        for(p in t.list[[i]])
+         {
+          if(p %in% unique(foo[,time.variable]) == FALSE)
+           stop(paste("\n time period ",p," from time.",names(t.list[i])," not found in time.variable\n",sep=""))
+         }
+        }
+     
+     # get time rows
+     time.predictors.prior.rows <-
+      which(foo[,time.variable] %in% time.predictors.prior)
 
-    ############################################################
-    # Predictors Pretreatment
+     time.optimize.ssr.rows <-
+      which(foo[,time.variable] %in% time.optimize.ssr)
 
+    # Build X1 & X0 Predictor matrices
+    
+   # first, run check on regular predictors, if specified
+   if(is.null(predictors)==FALSE)
+   {
+     # predictor checks
+     if(sum(duplicated(predictors))>0)
+      {stop("\n duplicates found in predictors \n")}
+
+     for(i in predictors)
+      {
+        if(mode(foo[,i]) != "numeric")
+         {stop(paste("\n predictor",i,"not found as numeric variable in foo \n"))}
+      }
+
+      if(mode(predictors)=="character")
+       {
+         pred.no <- c()
+         for(i in 1:length(predictors)){pred.no <- c(pred.no,which(names(foo) == predictors[i]))}
+         predictors <- pred.no
+       }
+    # X1 matrix for treated
     X1 <-
-      as.data.frame(foo[
+      data.frame(foo[
                         intersect(
                                   treatment.rows,
                                   time.predictors.prior.rows
@@ -236,56 +199,162 @@ dataprep<-
                         predictors
                         ]
                     )
+    colnames(X1) <- names(foo)[predictors]
+    rownames(X1) <- time.predictors.prior
 
-    if(sum(is.na(X1)) > 0)
-      {
-        cat(
-            "\n\n#####################################################",
-            "\nYou have missing data in pretmt TREATED predictors!",
-            "\nWe ignore (na.rm = TRUE) all missing values for predictors.op.",
-            "\nYou may want to reexamine your data!\n\n"
-            )
-      }
+    # deep missing checker:
+    for(i in 1:ncol(X1))
+     {
+       if(sum(is.na(X1[,i])) == nrow(X1))
+        {stop(paste("\n predictor",names(X1)[i],"has missing data for all periods in time.predictors.prior\n"))}
+        
+      for(j in 1:nrow(X1))
+       {
+         if(is.na(X1[j,i])){
+         cat(paste("\n Missing data- treated unit; predictor:",names(X1)[i],"; for period:",rownames(X1)[j],
+         "\n","We ignore (na.rm = TRUE) all missing values for predictors.op.\n"))}
+       }
+     }
 
+    # aggregate
     X1 <- apply(X1, 2, paste(predictors.op), na.rm = TRUE)
     X1 <- as.matrix(X1)
-
-    if(sum(is.na(X1)) > 0) {stop("\nX1 has NAs. Look at data.\n")}
-
-    
-
+    rownames(X1) <- names(foo)[predictors]
     colnames(X1) <- treatment.identifier
-
-    X0 <- as.data.frame(foo[intersect(control.rows,
+    
+    } else { # if no regular predictors are specified, pass a void matrix to special predictors
+    
+    X1 <- matrix(NA,0,1)
+    colnames(X1) <- treatment.identifier 
+    }
+    
+    # X0 matrix for controls
+    if(is.null(predictors)==FALSE)
+    {
+    X0 <- data.frame(foo[intersect(control.rows,
                                       time.predictors.prior.rows
                                       ),
                             c(predictors, unit.variable)
                             ]
                         )
+     checknames <- rep(time.predictors.prior,length(controls.identifier))
 
-    if(sum(is.na(X0)) > 0)
-      {
-        cat(
-            "\n\n#####################################################",
-            "\nYou have missing data in pretmt CONTROL predictors!",
-            "\nWe ignore (na.rm = TRUE) all missing values for predictors.op.",
-            "\nYou may want to reexamine your data!\n\n"
-            )
-      }
+     # deep missing checker:
+    for(i in 1:(ncol(X0)-1))
+     {
+
+       for(p in controls.identifier)
+        {
+         if(sum(is.na(X0[X0[,ncol(X0)] == p,i])) == length(is.na(X0[X0[,ncol(X0)] == p,i])))
+         {stop(paste("\n control unit:",p,"; predictor:",names(X0)[i],"has missing data for all periods in time.predictors.prior\n"))}
+        }
+       for(j in 1:nrow(X1))
+       {
+         if(is.na(X0[j,i])){
+         cat(paste("\n Missing data - control unit:",X0[j,ncol(X0)],"; predictor:",names(X0)[i],"; for period:",checknames[j],
+         "\n","We ignore (na.rm = TRUE) all missing values for predictors.op.\n"))}
+       }
+     }
 
     X0 <- split(X0, X0[,dim(X0)[2]])
-
     X0 <- sapply(X0, apply, 2, mean, na.rm = TRUE, simplify = TRUE)
     X0 <- as.matrix(X0[-dim(X0)[1],])
+    
+    
+   # Take transpose in presence of a single predictor only
+   if(dim(X0)[2]==1)
+   {
+    X0 <- t(X0)
+    rownames(X0) <- names(foo)[predictors]
+    colnames(X0) <- controls.identifier
+   }
 
-    if(sum(is.na(X0)) > 0) {stop("\nX1 has NAs. Look at data.\n")}
+    } else { # if no regular predictors are specified, pass a void matrix to special predictors
+    X0 <- matrix(NA,0,length(controls.identifier))
+    #rownames(X0) <- names(foo)[predictors]
+    colnames(X0) <- controls.identifier
+    }
 
-    ################################################################
-    # Dependent Variable Pretreatment
+    # Add Special Predictors to X1 and X0
+
+    if(is.null(special.predictors) == FALSE)
+      {
+        if(is.list(special.predictors) == FALSE)
+         {stop("\nspecial.predictors is not a list object\n")}
+
+        for(i in 1:length(special.predictors))
+          {
+          
+           # checks for special predictors
+            if(is.list(special.predictors[[i]]) == FALSE)
+             {stop(paste("\n special.predictor number",i,"is not a list object\n"))}
+
+            if(length(special.predictors[[i]]) != 3)
+             {stop(paste("\n special.predictor number",i,"is misspecified (requires predictor name, time periods, and name of operation\n"))}
+
+           # name check
+            sp.name <- special.predictors[[i]][[1]]
+            if(is.na(sp.name) || length(sp.name) != 1)
+            {stop(paste("\n predictor name",sp.name,"of special.predictor number",i,"misspecified\n"))}
+            
+           # availability check
+           if(mode(foo[,sp.name]) != "numeric")
+            {stop(paste("\n special predictor named ",sp.name,"not found as numeric variable in foo \n"))}
+           
+           # time check
+            sp.time <- special.predictors[[i]][[2]]
+            if(mode(sp.time) != "numeric")
+            {stop(paste("\n for special predictor:",sp.name," (which is special.predictor number",i,") the time period is misspecified\n"))}
+            if(sum(duplicated(sp.time))>0)
+             {stop(paste("\n for special predictor:",sp.name," (which is special.predictor number",i,") time period contains duplicates\n"))}
+            if(length(sp.time)<1)
+             {stop(paste("\n for special predictor:",sp.name," (which is special.predictor number",i,") specify at least on time period\n"))}
+             
+           # time availability check
+           for(p in sp.time)
+            {
+             if(p %in% unique(foo[,time.variable]) == FALSE)
+              {stop(paste("\n for special predictor:",sp.name," (which is special.predictor number",i,") time period",p,"not found in time.variable\n"))}
+            }
+
+           # operator check
+           sp.op <- special.predictors[[i]][[3]]
+            if(mode(sp.op) != "character" || length(sp.op) !=1 )
+            {stop(paste("\n for special predictor:",sp.name," (which is special.predictor number",i,") the operator is mispecified\n"))}
+
+           # now go and built matrices
+           spf <- spec.pred.func(list.object = special.predictors[[i]],
+                                  tr.numb = treatment.identifier,
+                                  co.numb = controls.identifier,
+                                  unit.var = unit.variable,
+                                  time.var = time.variable,
+                                  foo.object = foo,
+                                  X0.inner = X0,
+                                  X1.inner = X1
+                                  )
+
+            X0 <- spf[[1]]
+            X1 <- spf[[2]]
+
+          }
+
+      }
+
+   # no predictors check
+    if(nrow(X0)==0)
+     {stop("No predictors specified. Please specify at least on predictor")}
+
+   # Dependent Variable Pretreatment
+
+    if(is.null(dependent))
+     {stop("\n dependent variabale is missing")}
+
+    if(mode(foo[,dependent]) != "numeric")
+         {stop(paste("\n dependent variable",dependent,"not found as numeric variable in foo \n"))}
 
     if(mode(dependent) == "character")
       {dependent <- which(is.element(names(foo), dependent))}
-    foo[,dependent] <- as.numeric(as.character(foo[,dependent]))
+    #foo[,dependent] <- as.numeric(as.character(foo[,dependent]))
 
     Z1 <- foo[
               intersect(
@@ -297,17 +366,18 @@ dataprep<-
 
     Z1 <- as.matrix(Z1)
 
-    if(sum(is.na(Z1)) > 0)
-
-      {
-        stop(
-            "\n\n#####################################################",
-            "\nYou have missing data in TREATED outcome vars!\n\n"
-             )            
-      }
+    # missing check
+    if(sum(is.na(Z1)) == length(Z1))
+     {stop("\n treated unit: dependent variable is missing for all periods in time.optimize.ssr.rows \n")}
 
     rownames(Z1) <- time.optimize.ssr
     colnames(Z1) <- treatment.identifier
+    
+    for(i in 1:length(Z1))
+      {
+        if(is.na(Z1[i]))
+        {stop(paste("\n treated unit: dependent variable is missing for period",rownames(Z1)[i],"in time.optimize.ssr.rows \n"))}
+      }
 
     Z0 <-
       as.matrix(foo[
@@ -319,101 +389,75 @@ dataprep<-
                     ]
                 )
 
-    if(sum(is.na(Z1)) > 0)
-      {
-        stop(
-            "\n\n#####################################################",
-            "\nYou have missing data in CONTROL outcome vars!\n\n)"
-            )
-      }
-
     Z0 <- matrix(
                  Z0,
                  byrow = FALSE,
                  nrow = length(time.optimize.ssr),
                  ncol = length(controls.identifier),
                  )
-
+                 
     colnames(Z0)<- controls.identifier
     rownames(Z0)<- time.optimize.ssr
 
-    ##########################################################
-    # Dependent Variable Plot
+    for(i in 1:ncol(Z0))
+      {
+        for(j in 1:nrow(Z0))
+        {
+        if(is.na(Z0[j,i]))
+        {stop(paste("\n control unit:",colnames(Z0)[i],"; dependent variable",dependent,"is missing for period",rownames(Z0)[j],"in time.optimize.ssr.rows \n"))}
+        }
+      }
+    
 
-        y.plot.rows <-
-          which(is.element(foo[,time.variable], y.plot ) == TRUE)
+     # dependent Variable Plot
+        time.plot.rows <-
+          which(is.element(foo[,time.variable], time.plot ) == TRUE)
 
-        Y1plot <- foo[intersect(treatment.rows, y.plot.rows), dependent]
+        Y1plot <- foo[intersect(treatment.rows, time.plot.rows), dependent]
         Y1plot <- as.matrix(Y1plot)
-
-        if(sum(is.na(Y1plot) > 0))
-           {
-             cat( 
-                 "\n\n######################################################",
-                 "\nYou have missing data in treated plotted outcome vars!\n\n")           }
-
-        rownames(Y1plot) <- y.plot
+        rownames(Y1plot) <- time.plot
         colnames(Y1plot) <- treatment.identifier
 
+     if(sum(is.na(Y1plot)) == length(Y1plot))
+     {stop("\n treated unit: dependent variable is missing for all periods in time.plot \n")}
+
+      for(i in 1:length(Y1plot))
+       {
+        if(is.na(Y1plot[i]))
+        {stop(paste("\n treated unit: dependent variable is missing for period",rownames(Y1plot)[i],"in time.plot \n"))}
+       }
+
         Y0plot <- as.matrix(foo[
-                                intersect(control.rows, y.plot.rows),
+                                intersect(control.rows, time.plot.rows),
                                 c(dependent)
                                 ]
                             )
 
-        if(sum(is.na(Y0plot) > 0))
-           {
-             cat(
-                 "\n\n######################################################",
-                 "\nYou have missing data in control plotted outcome vars\n\n")
-           }
-
         Y0plot  <- matrix(
                           Y0plot,
                           byrow = FALSE,
-                          nrow = length(y.plot),
+                          nrow = length(time.plot),
                           ncol = length(controls.identifier),
                           )
 
-        colnames(Y0plot) <- unique(foo[control.rows, unit.variable])
-        
+
+        rownames(Y0plot) <- time.plot
+        colnames(Y0plot) <- controls.identifier
      
 
-    ########################################################################
-    # Special Predictors#
+        # table with unit names
+              names.and.numbers <-
+        data.frame(c(treatment.identifier.name,controls.identifier.name),
+                   c(treatment.identifier,controls.identifier))
 
-    if(mode(special.predictors) != "logical" & length(special.predictors) > 0)
-      {
-        for(i in 1:length(special.predictors))
-          {
-            spf <- spec.pred.func(list.object = special.predictors[[i]],
-                                  tr.numb = treatment.identifier,
-                                  co.numb = controls.identifier,
-                                  unit.var = unit.variable,
-                                  time.var = time.variable,
-                                  foo.object = foo,
-                                  X0.inner = X0,
-                                  X1.inner = X1
-                                  )
 
-            if(sum(is.na(spf$X1.inner) > 0))
-              {
-                stop("\n\n#################################################\n",
-                     "\nMissingness in *Treated* special predictor", i, "\n\n")
-              }
 
-            if(sum(is.na(spf$X0.inner) > 0))
-              {
-                stop("\n\n#################################################\n",
-                     "\nMissingness in *Control* special predictor", i, "\n\n")
-              }
+      names(names.and.numbers) <- c(
+                                    "unit.names",
+                                    "unit.numbers"
+                                    )
 
-            X0 <- spf[[1]]
-            X1 <- spf[[2]]
 
-          }
-
-      }
 
   #######################
        
@@ -429,7 +473,7 @@ dataprep<-
               controls.identifier = controls.identifier,
               time.predictors.prior = time.predictors.prior,
               time.optimize.ssr = time.optimize.ssr,
-              y.plot = y.plot,
+              time.plot = time.plot,
               unit.names.variable = unit.names.variable
               )
 
