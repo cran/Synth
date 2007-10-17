@@ -15,7 +15,7 @@ synth.tab(synth.res    = NA,
   \item{dataprep.res}{The list resulting from the call to \code{\link{dataprep}}.}
   \item{round.digit}{Integer for rounding in tables.}
 }
-\details{}
+\details{NA}
 \value{
   \item{tab.v}{The matrix that contains the table of V-weights and respective variable names.}
   \item{tab.w}{The matrix that contains the table of W-weights and respective unit numbers and possibly names.}
@@ -32,7 +32,7 @@ synth.tab(synth.res    = NA,
 
             }
    
-\author{Alexis Diamond \email{adiamond@fas.harvard.edu} Jens Hainmueller \email{jhainm@fas.harvard.edu}}\note{}
+\author{Alexis Diamond \email{adiamond@fas.harvard.edu} Jens Hainmueller \email{jhainm@fas.harvard.edu}}\note{NA}
 \seealso{ \code{gaps.plot},\code{synth.plot},\code{dataprep},\code{synth.tab} }
 \examples{
 ##---- Should be DIRECTLY executable !! ----

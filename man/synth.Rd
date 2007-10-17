@@ -84,7 +84,7 @@ the algorithm used to construct synthetic control groups.}
    
 \author{Alexis Diamond \email{adiamond@fas.harvard.edu} 
         Jens Hainmueller \email{jhainm@fas.harvard.edu}}
-\note{}
+\note{NA}
 \seealso{ \code{gaps.plot},\code{synth.plot},\code{dataprep},\code{synth.tab} }
 \examples{
 

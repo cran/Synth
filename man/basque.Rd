@@ -18,7 +18,9 @@ Region no. 1 is the average for the whole country of Spain. 1 outcome variable (
 (6 sectoral production shares, 6 highest eductional attainment categories, population density, and the investment rate).
 Region names and numbers are stored in regionno and regionname. 42 time periods (1955 - 1997).
 All columns have self-explanatory column names.}
-\source{}
+\source{Abadie, A. and Gardeazabal, J. (2003) Economic Costs of Conflict: A Case Study of the Basque Country 
+            \emph{American Economic Review} 93 (1) 113--132 
+             \url{http://ksghome.harvard.edu/~.aabadie.academic.ksg/ecc.pdf}}
 \references{Abadie and Gardeazabal (2003)}
 \keyword{datasets}
 

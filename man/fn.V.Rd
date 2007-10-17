@@ -23,8 +23,8 @@ Z0 = stop("Z0 missing"), Z1 = stop("Z1 missing"), margin.ipop = 0.0005, sigf.ipo
   \item{\dots}{NA}
 
 }
-\details{}
-\value{
+\details{NA}
+\value{A list object containing the optimization results.
 }
 \references{Abadie, A. and Gardeazabal, J. (2003) Economic Costs of Conflict: A Case Study of the Basque Country 
             \emph{American Economic Review} 93 (1) 113--132 
@@ -37,12 +37,10 @@ Z0 = stop("Z0 missing"), Z1 = stop("Z1 missing"), margin.ipop = 0.0005, sigf.ipo
 
             }
    
-\author{Alexis Diamond \email{adiamond@fas.harvard.edu} Jens Hainmueller \email{jhainm@fas.harvard.edu}}\note{}
+\author{Alexis Diamond \email{adiamond@fas.harvard.edu} Jens Hainmueller \email{jhainm@fas.harvard.edu}}\note{NA}
 \seealso{ \code{gaps.plot},\code{synth.plot},\code{dataprep},\code{synth.tab} }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+##---- NA -----
 }
 \keyword{methods}
 

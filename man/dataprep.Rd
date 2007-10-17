@@ -122,7 +122,7 @@ predicator x2 should be used with its median values over periods 1980:1983; x3 s
 
             }
    
-\author{Alexis Diamond \email{adiamond@fas.harvard.edu} Jens Hainmueller \email{jhainm@fas.harvard.edu}}\note{}
+\author{Alexis Diamond \email{adiamond@fas.harvard.edu} Jens Hainmueller \email{jhainm@fas.harvard.edu}}\note{NA}
 \seealso{ \code{gaps.plot},\code{synth.plot},\code{dataprep},\code{synth.tab} }
 \examples{
 
