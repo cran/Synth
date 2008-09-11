@@ -1,11 +1,11 @@
-# Function Synth: JH 9/21/07
+# Function Synth: JH 9/11/08
 "synth" <-
   function(           data.prep.obj = NULL,
                       X1 = NULL,
                       X0 = NULL,
                       Z0 = NULL,
                       Z1 = NULL,
-                      custom.v = FALSE,
+                      custom.v = NULL,
                       Margin.ipop = 0.0005,
                       Sigf.ipop = 5,
                       Bound.ipop = 10,
@@ -74,7 +74,7 @@
     # or if only on predictor is specified,
     # we jump to quadratic optimization over W weights
     # if not start optimization over V and W
-    if(custom.v == TRUE || nrow(X0) != 1)
+    if(is.null(custom.v) & nrow(X0) != 1)
       {
       
       # two attemps for best V are made: 
@@ -201,7 +201,7 @@
     V <- diag(solution.v)
     H <- t(X0.scaled) %*% V %*% (X0.scaled)
     a <- X1.scaled
-    c <- -2*c(t(a) %*% V %*% (X0.scaled) )
+    c <- -1*c(t(a) %*% V %*% (X0.scaled) )
     A <- t(rep(1, length(c)))
     b <- 1
     l <- rep(0, length(c))

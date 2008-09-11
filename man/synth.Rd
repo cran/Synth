@@ -37,7 +37,7 @@ to the synthetic control unit.
 \usage{
 synth(data.prep.obj = NULL, X1 = NULL, X0 = NULL, 
 Z0 = NULL, Z1 = NULL, 
-custom.v = FALSE, Margin.ipop = 0.0005, Sigf.ipop = 5, Bound.ipop = 10,genoud = FALSE, ...)
+custom.v = NULL, Margin.ipop = 0.0005, Sigf.ipop = 5, Bound.ipop = 10,genoud = FALSE, ...)
 }
 \arguments{
   \item{data.prep.obj}{the object that comes from running \code{\link{dataprep}}. This object contains all

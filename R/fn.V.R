@@ -1,4 +1,4 @@
-# Function fn.V: JH 9/20/07
+# Function fn.V: JH 9/11/08
 "fn.V" <-
 
   function(
@@ -19,7 +19,7 @@
     # set up QP problem
     H <- t(X0.scaled) %*% V %*% (X0.scaled)
     a <- X1.scaled
-    c <- -2*c(t(a) %*% V %*% (X0.scaled) )
+    c <- -1*c(t(a) %*% V %*% (X0.scaled) )
     A <- t(rep(1, length(c)))
     b <- 1
     l <- rep(0, length(c))
