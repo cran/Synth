@@ -1,14 +1,17 @@
 Package: Synth
-Version: 0.1-6
-Date: 2008-09-11
+Version: 0.1-8
+Date: 2011-03-14
 Title: Synthetic Control Group Method for Comparative Case Studies
-Author: Alexis Diamond <adiamond@fas.harvard.edu> and 
-        Jens Hainmueller <jhainm@fas.harvard.edu>
-Maintainer: Jens Hainmueller <jhainm@fas.harvard.edu>
-Description: Implements the synthetic control group method for comparative case studies 
-             developed in Abadie and Gardeazabal (2003) and Abadie, Diamond, Hainmueller (2007). 
-Depends: kernlab 
+Author: Alexis Diamond <adiamond@fas.harvard.edu> and Jens Hainmueller
+        <jhainm@mit.edu>
+Maintainer: Jens Hainmueller <jhainm@mit.edu>
+Description: Implements the synthetic control group method for
+        comparative case studies developed in Abadie and Gardeazabal
+        (2003) and Abadie, Diamond, Hainmueller (2010).
+Depends: kernlab
 Suggests: rgenoud
 License: GPL (>= 3)
-URL: http://www.people.fas.harvard.edu/~jhainm/
-Packaged: Thu Sep 11 14:15:20 2008; Jank
+URL: http://www.mit.edu/~jhainm/software.htm
+Packaged: 2011-03-14 21:58:34 UTC; jhainmueller
+Repository: CRAN
+Date/Publication: 2011-03-15 08:14:10
