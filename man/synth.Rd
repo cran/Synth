@@ -2,14 +2,14 @@
 \alias{synth}
 \title{ Constructs synthetic control units for comparative case studies}
 \description{
-  The function \code{\link{synth}} implements the synthetic control method for causal inference in comparative case studies as developed in Abadie and Gardeazabal (2003) and Abadie, Diamond, Hainmueller (2007). \code{\link{synth}} estimates the effect of an intervention of interest by comparing
+  The function \code{\link{synth}} implements the synthetic control method for causal inference in comparative case studies as developed in Abadie and Gardeazabal (2003) and Abadie, Diamond, Hainmueller (2010). \code{\link{synth}} estimates the effect of an intervention of interest by comparing
 the evolution of an aggregate outcome for a unit affected by the intervention to the evolution of the same aggregate outcome for a synthetic control group.
 
     \code{\link{synth}} constructs this synthetic control group by searching for a weighted combination of control units chosen to approximate the unit affected by the intervention in terms of the outcome predictors. The evolution of the outcome for the resulting synthetic control group is an estimate of the counterfactual of what would have been observed for the affected unit in the absence of the intervention. 
 
 \code{\link{synth}} can also be used to conduct a variety of placebo and permutation tests that produce
     informative inference regardless of the number of available comparison units and the number of available time-periods. See Abadie and Gardeazabal (2003) and Abadie,
-    Diamond, and Hainmueller (2007) for details.
+    Diamond, and Hainmueller (2010) for details.
 
 \code{\link{synth}} requires the user to supply four matrices as its main arguments. These matrices are named X0, X1, Z1, and Z0 accordingly. X1 and X0 contain the predictor values for the treated unit and the control units respectively. Z1 and Z0 contain the outcome variable for the pre-intervention period for the treated unit and the control unit respectively. The pre-intervention period refers to the time period prior to the intervention, over which the mean squared prediction error (MSPE) should be minimized. The MSPE refers to the squared deviations between the outcome for the treated unit and the
 synthetic control unit summed over all pre-intervention periods specified in Z1 and Z0.
@@ -23,7 +23,7 @@ Accordingly, a usual sequence of commands to implement the synthetic control met
 
  An example of this sequence is provided in the documentation to \code{\link{dataprep}}. This procedure is strongly recommended. Alternatively, the user may provide his own preprocessed data matrices and load them into \code{\link{synth}} via the X0, X1, Z1, and Z0 arguments. In this case, no data.prep.obj should be specified.
 
-As proposed in Abadie and Gardeazabal (2003) and Abadie, Diamond, Hainmueller (2007), the \code{\link{synth}} function routinely searches for the set of weights that generate the  best fitting convex combination of the control units. In other words, the predictor weight matrix V is chosen among all positive definite diagonal matrices such that MSPE is minimized for the pre-intervention period. 
+As proposed in Abadie and Gardeazabal (2003) and Abadie, Diamond, Hainmueller (2010), the \code{\link{synth}} function routinely searches for the set of weights that generate the  best fitting convex combination of the control units. In other words, the predictor weight matrix V is chosen among all positive definite diagonal matrices such that MSPE is minimized for the pre-intervention period. 
 
 Instead of using this data-driven procedures to search for the best fitting synthetic control group, the
 user may supply his own V weights, based on his subjective assessment of the predictive power of the variables in X1 and X0. In this case, the vector of V weights for each variable should be
@@ -73,14 +73,16 @@ the algorithm used to construct synthetic control groups.}
 }
 
 \references{Abadie, A. and Gardeazabal, J. (2003) Economic Costs of Conflict: A Case Study of the Basque Country 
-            \emph{American Economic Review} 93 (1) 113--132 
-             \url{http://ksghome.harvard.edu/~.aabadie.academic.ksg/ecc.pdf}
-           
-            Abadie, A., Diamond, A., Hainmueller, J. (2007) Synthetic Control Methods
-            for Comparative Case Studies: Estimating the Effect of California's Tobacco Control Program
-            \emph{NBER Technical Working Paper no 335}
-            \url{http://www.people.fas.harvard.edu/~jhainm/}
-            }
+            \emph{American Economic Review} 93 (1) 113--132.
+                        
+            
+            Abadie A, Diamond A, Hainmueller J (2010). Synthetic Control Methods for Comparative
+Case Studies: Estimating the Effect of California's Tobacco Control Program. \emph{Journal of
+the American Statistical Association} 105 (490) 493--505.
+            
+Abadie, A., Diamond, A., Hainmueller, J. (2011). Synth: An R Package for Synthetic Control Methods in Comparative 
+Case Studies. \emph{Journal of Statistical Software} 42 (13) 1--17.}
+
    
 \author{Alexis Diamond \email{adiamond@fas.harvard.edu} 
         Jens Hainmueller \email{jhainm@fas.harvard.edu}}

@@ -6,7 +6,7 @@ The \code{\link{synth}} function takes a standard panel dataset and produces
 	     a list of data objects necessary for running \code{\link{synth}}
 	     and other Synth package functions to construct
            synthetic control groups according to the methods outlined in 
-           Abadie and Gardeazabal (2003) and Abadie, Diamond, Hainmueller (2007) (see references and example). 
+           Abadie and Gardeazabal (2003) and Abadie, Diamond, Hainmueller (2010) (see references and example). 
 
 	     User supplies a dataframe ("foo"), chooses predictors,
 	     special predictors (explained below), the operators that
@@ -112,13 +112,15 @@ predicator x2 should be used with its median values over periods 1980:1983; x3 s
   \item{tag}{a list of all arguments in initial function call.}
 }
 \references{Abadie, A. and Gardeazabal, J. (2003) Economic Costs of Conflict: A Case Study of the Basque Country 
-            \emph{American Economic Review} 93 (1) 113--132 
-             \url{http://ksghome.harvard.edu/~.aabadie.academic.ksg/ecc.pdf}
-           
-            Abadie, A., Diamond, A., Hainmueller, J. (2007) Synthetic Control Methods
-            for Comparative Case Studies: Estimating the Effect of California's Tobacco Control Program
-            \emph{NBER Technical Working Paper no 335}
-            \url{http://www.people.fas.harvard.edu/~jhainm/}
+            \emph{American Economic Review} 93 (1) 113--132.
+            
+                        Abadie A, Diamond A, Hainmueller J (2010). Synthetic Control Methods for Comparative
+Case Studies: Estimating the Effect of California's Tobacco Control Program. \emph{Journal of
+the American Statistical Association} 105 (490) 493--505.
+            
+Abadie, A., Diamond, A., Hainmueller, J. (2011). Synth: An R Package for Synthetic Control Methods in Comparative 
+Case Studies. \emph{Journal of Statistical Software} 42 (13) 1--17.
+
 
             }
    

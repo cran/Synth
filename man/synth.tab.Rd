@@ -22,13 +22,18 @@ synth.tab(synth.res    = NA,
   \item{tab.loss}{The matrix that contains the table of W-loss and V-loss}
 }
 \references{Abadie, A. and Gardeazabal, J. (2003) Economic Costs of Conflict: A Case Study of the Basque Country 
-            \emph{American Economic Review} 93 (1) 113--132 
-             \url{http://ksghome.harvard.edu/~.aabadie.academic.ksg/ecc.pdf}
-           
-            Abadie, A., Diamond, A., Hainmueller, J. (2007) Synthetic Control Methods
-            for Comparative Case Studies: Estimating the Effect of California's Tobacco Control Program
-            \emph{NBER Technical Working Paper no 335}
-            \url{http://www.people.fas.harvard.edu/~jhainm/}
+            \emph{American Economic Review} 93 (1) 113--132.
+            
+                                    
+            
+            Abadie A, Diamond A, Hainmueller J (2010). Synthetic Control Methods for Comparative
+Case Studies: Estimating the Effect of California's Tobacco Control Program. \emph{Journal of
+the American Statistical Association} 105 (490) 493--505.
+            
+Abadie, A., Diamond, A., Hainmueller, J. (2011). Synth: An R Package for Synthetic Control Methods in Comparative 
+Case Studies. \emph{Journal of Statistical Software} 42 (13) 1--17.
+
+   
 
             }
    

@@ -1,12 +1,12 @@
 spec.pred.func <- function(
                            list.object = NULL,
-                           tr.numb = treatment.identifier,
-                           co.numb = controls.identifier,
-                           unit.var = unit.variable,
-                           time.var = time.variable,
-                           foo.object = foo,
-                           X0.inner = X0,
-                           X1.inner = X1
+                           tr.numb = NULL,
+                           co.numb = NULL,
+                           unit.var = NULL,
+                           time.var = NULL,
+                           foo.object = NULL,
+                           X0.inner = NULL,
+                           X1.inner = NULL
                            )
   {
 

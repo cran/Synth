@@ -45,8 +45,7 @@ total production.
 }
 }
 \source{Abadie, A. and Gardeazabal, J. (2003) Economic Costs of Conflict: A Case Study of the Basque Country 
-            \emph{American Economic Review} 93 (1) 113--132 
-             \url{http://ksghome.harvard.edu/~.aabadie.academic.ksg/ecc.pdf}}
-\references{Abadie and Gardeazabal (2003)}
+            \emph{American Economic Review} 93 (1) 113--132.}
+
 \keyword{datasets}
 

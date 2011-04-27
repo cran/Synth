@@ -75,8 +75,8 @@ path.plot <-
                      # Get Ylim right 
                      if(sum(is.na(Ylim))>0)
                       {
-                        Y.max <-  max(c(z0plot,Z1))
-                        Y.min <-  min(c(z0plot,Z1))
+                        Y.max <-  max(c(z0plot,dataprep.res$Z1))
+                        Y.min <-  min(c(z0plot,dataprep.res$Z1))
                         
                         Ylim <- c(
                                    (Y.min - .3*Y.min),
