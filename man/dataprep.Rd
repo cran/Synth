@@ -2,24 +2,11 @@
 \alias{dataprep}
 \title{Constructs a list of matrices from panel dataset to be loaded into synth()}
 \description{
-The \code{\link{synth}} function takes a standard panel dataset and produces 
-	     a list of data objects necessary for running \code{\link{synth}}
-	     and other Synth package functions to construct
-           synthetic control groups according to the methods outlined in 
-           Abadie and Gardeazabal (2003) and Abadie, Diamond, Hainmueller (2010) (see references and example). 
+The \code{\link{synth}} function takes a standard panel dataset and produces a list of data objects necessary for running \code{\link{synth}} and other Synth package functions to construct synthetic control groups according to the methods outlined in            Abadie and Gardeazabal (2003) and Abadie, Diamond, Hainmueller (2010) (see references and example). 
 
-	     User supplies a dataframe ("foo"), chooses predictors,
-	     special predictors (explained below), the operators that
-	     act upon these predictors, the dependent variable,
-	     identifies the columns associated with unit numbers,
-	     time periods (and unit names, when available),
-	     as well as the treated unit, the control units,
-	     the time-period over which to select the predictors,
-	     the time-period over which to optimize,
-	     and the time-period over which outcome data should be plotted.
-	     
-	     The output of \code{\link{dataprep}} contains a list of matrices. This list object can be
-directly loaded into \code{\link{synth}}. 
+User supplies a dataframe ("foo"), chooses predictors, special predictors (explained below), the operators that act upon these predictors, the dependent variable, identifies the columns associated with unit numbers, time periods (and unit names, when available), as well as the treated unit, the control units, the time-period over which to select the predictors, the time-period over which to optimize, and the time-period over which outcome data should be plotted.
+
+The output of \code{\link{dataprep}} contains a list of matrices. This list object can be directly loaded into \code{\link{synth}}. 
 }
 \usage{dataprep(foo = NULL, predictors = NULL,
           predictors.op = "mean", special.predictors = NULL,
@@ -38,22 +25,17 @@ directly loaded into \code{\link{synth}}.
   \item{predictors.op}{A character string identifying the method (operator) to be used
     on the predictors.  Default is "mean". rm.na = T is hardwired into
     the code. See *Details*.}
-  \item{special.predictors}{A list object identifying additional numeric predictors and
-    their associated pre-treatment years and operators (analagous to
+  \item{special.predictors}{A list object identifying additional numeric predictors and their associated pre-treatment years and operators (analogous to
     ``predictors.op'' above).  See *Details*.}
-  \item{dependent}{A scalar identifying the column number or column-name character string
-    that corresponds to the numeric dependent (outcome) variable.}
-  \item{unit.variable}{A scalar identifying the column number or column-name character string
-    associated unit numbers. The unit.varibale has to be numeric.}
-  \item{time.variable}{A scalar identifying column number or column-name character string
-    associated with period (time) data. The time variable has to be numeric.} 
+  \item{dependent}{A scalar identifying the column number or column-name character string that corresponds to the numeric dependent (outcome) variable.}
+  \item{unit.variable}{A scalar identifying the column number or column-name character string associated unit numbers. The unit.varibale has to be numeric.}
+  \item{time.variable}{A scalar identifying column number or column-name character string associated with period (time) data. The time variable has to be numeric.} 
   \item{treatment.identifier}{A scalar identifying the ``unit.variable'' number or a character string
-    giving the ``unit.name ''of the treated unit. If a charater is supplied, a unit.names.variable also has to be supplied to identify the treated unit.}
-  \item{controls.identifier }{ A scalar identifying the ``unit.variable'' numbers or a vector of
-    character strings giving the ``unit.name''s of control units. If a charater is supplied, a unit.names.variable also has to be supplied to identify the control units unit.}
+    giving the ``unit.name ''of the treated unit. If a character is supplied, a unit.names.variable also has to be supplied to identify the treated unit.}
+  \item{controls.identifier }{ A scalar identifying the ``unit.variable'' numbers or a vector of character strings giving the ``unit.name''s of control units. If a character is supplied, a unit.names.variable also has to be supplied to identify the control units unit.}
   \item{time.predictors.prior }{A numeric vector identifying the pretreatment periods over which the values for the outcome predictors should be averaged.}
   \item{time.optimize.ssr}{A numeric vector identifying the periods of the dependent variable over which the loss function 
-should be minimized (i.e. the periods over which mean squared prediction error (MSPE) , that is the sum of squared residuals between treated and the synthetic conrol unit, are minimzed.}
+should be minimized (i.e. the periods over which mean squared prediction error (MSPE) , that is the sum of squared residuals between treated and the synthetic control unit, are minimized.}
   \item{time.plot}{A vector identifying the periods over which results are to be plotted
     with \code{\link{gaps.plot}} and \code{\link{path.plot}}.}
   \item{unit.names.variable}{A scalar or column-name character string identifying the column with the names of the units. This variable has to be of mode character. 
@@ -124,35 +106,11 @@ Case Studies. \emph{Journal of Statistical Software} 42 (13) 1--17.
 
             }
    
-\author{Alexis Diamond \email{adiamond@fas.harvard.edu} Jens Hainmueller \email{jhainm@fas.harvard.edu}}\note{NA}
-\seealso{ \code{gaps.plot},\code{synth.plot},\code{dataprep},\code{synth.tab} }
+\author{Jens Hainmueller and Alexis Diamond}
+\seealso{ \code{\link{synth}}, \code{\link{gaps.plot}}, \code{\link{path.plot}}, \code{\link{synth.tab}} 
+}
 \examples{
-
-## Below we provide two examples of how to use synth
-
-## First example using artifcial data:
-
-## First, load the dataframe synth.data
-## this dataframe has
-## 8 units: 
-## 1 treated, 6 control (2,7,13,17,29,32,38), treated is no 7
-## 3 predictors (X1, X2, X3)
-## 21 time periods (1980 - 2000)
-## a unit.names.variable column ("names"
-## and an outcome variable column (Y)
-## all columns have column names
-
 data(synth.data)
-
-## run dataprep using character strings
-## imagine treatment took place in 1991.
-## as predictors, we want the average values of
-## X1, X2, X3 over 1984 to 1989.
-## and we want to track our synthetic control unit
-## to track the treated unit's 1980-1991 outcomes
-## as well as possible.
-
-## we want to set it up to plot outcomes from 1984-1996
 
  dataprep.out <-
                   dataprep(
@@ -178,39 +136,37 @@ data(synth.data)
 
 ## then we run the synth command to identify optimal
 ## weights-- the optimal way to aggregate information about all the
-## control units in such a way as to create the best possiblesynthetic
+## control units in such a way as to create the best possible synthetic
 ## control unit for the treated.
-synth.out <- synth(dataprep.out,method = "BFGS")
+synth.out <- synth(dataprep.out)
 
 ## then we want to summarize the results, both numerically and graphically
-## there are two ways to summarzie the results
+## there are two ways to summarize the results
 ## we can either access the output from synth.out directly
 ## eg.
-synth.out$solution.w 
+round(synth.out$solution.w,2)
 # contains the unit weights or
 synth.out$solution.v 
 ## contains the predictor weights. 
 
 ## the output from synth opt can be flexibly combined with 
-## the output from dataprep to compute other quatities of interest
-## for example, the preriod by preriod discrepancies between the 
+## the output from dataprep to compute other quantities of interest
+## for example, the period by period discrepancies between the 
 ## treated unit and its synthetic control unit
 ## can be computed by typing
-gaps<-dataprep.out$Y1plot-(
-                           dataprep.out$Y0plot
-                           \%*\%
-                           synth.out$solution.w
+gaps<- dataprep.out$Y1plot-(
+                           dataprep.out$Y0plot\%*\%synth.out$solution.w
                            ) ; gaps
 
 ## the Synth package also offers three convenience functions to summarize results.
 ## to get summary tables for all information 
-## (V and W weights plus balance btw. treated and synthtic control) use the 
+## (V and W weights plus balance btw. treated and synthetic control) use the 
 ## synth.tab() command
 synth.tables <- synth.tab(dataprep.res = dataprep.out,synth.res = synth.out)
 print(synth.tables)
 
 ## to get summary plots for outcome trajectories 
-## of the treated and the synthtic control unit use the 
+## of the treated and the synthetic control unit use the 
 ## path.plot() and the gaps.plot() commands
 
 ## plot in levels (treated and synthetic)
@@ -219,16 +175,12 @@ path.plot(dataprep.res = dataprep.out,synth.res = synth.out)
 ## plot the gaps (treated - synthetic)
 gaps.plot(dataprep.res = dataprep.out,synth.res = synth.out)
 
-
-
 ## Second example: The economic impact of terrorism in the
 ## Basque country using data from Abadie and Gardeazabal (2003)
-## see the paper for details
-
+## see JSS paper in the references details
 data(basque)
 
 # dataprep: prepare data for synth
-
 dataprep.out <-
                   dataprep(
                             foo = basque
@@ -277,10 +229,7 @@ dataprep.out$X0[lowest:highest,] <-  100 * scale(
     
 
 # run synth
-synth.out <- synth(
-                   data.prep.obj = dataprep.out,                                 
-                   method = "BFGS"
-                   )
+synth.out <- synth(data.prep.obj = dataprep.out)
 
 # Get result tables
 synth.tables <- synth.tab(
@@ -307,7 +256,7 @@ gaps.plot(synth.res = synth.out,
           Ylab = c("gap in real per-capita GDP (1986 USD, thousand)"),
           Xlab = c("year"), 
           Ylim = c(-1.5,1.5), 
-          ) 
+          )
 
 }
-\keyword{methods}
+

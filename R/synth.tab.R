@@ -1,8 +1,5 @@
-# Function Synth.tab: JH 9/23/07
-
-"synth.tab" <-
- 
-  function(
+synth.tab <-
+function(
            synth.res    = NA,
            dataprep.res = NA,
            round.digit  = 3
@@ -27,9 +24,10 @@
      }
      
      
-    tab.v           <- round(as.matrix(synth.res$solution.v),round.digit)
+    tab.v           <- matrix(round(synth.res$solution.v,round.digit),
+                              nrow=length(synth.res$solution.v))
     rownames(tab.v) <- rownames(dataprep.res$X1)
-    colnames(tab.v) <- c("V weights")
+    colnames(tab.v) <- c("v.weights")
    
     treat.no <-  dataprep.res$tag$treatment.identifier
     nmat     <-  dataprep.res$names.and.numbers[-which(
@@ -42,7 +40,7 @@
                                   nmat
                                   )
     colnames(tab.w) <- c(
-                         "w-weights",
+                         "w.weights",
                          "unit.names",
                          "unit.numbers"
                          )
@@ -51,6 +49,7 @@
                                 synth.res$loss.w,
                                 synth.res$loss.v
                                 )
+    rownames(tab.loss) <- NULL
     colnames(tab.loss) <- c(
                             "Loss W",
                             "Loss V"
@@ -83,4 +82,3 @@
 
   }
 
-    

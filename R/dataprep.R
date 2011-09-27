@@ -1,7 +1,5 @@
-# Function Dataprep: JH 9/18/07
-dataprep<-
-
-  function(
+dataprep <-
+function(
                         foo = NULL,
                         predictors = NULL,
                         predictors.op = "mean",
@@ -127,13 +125,11 @@ dataprep<-
        control.rows   <- which(foo[,unit.variable] %in% controls.identifier)
 
       # check if panel is unbalanced  (possible cases where this too restrictive, but imposes discipline)
-           if(unique(
-                  table(
-                        foo[c(control.rows,treatment.rows),unit.variable],
-                        foo[c(control.rows,treatment.rows),time.variable])
-                            ) != 1)
+       balcheck <-       table(    foo[c(control.rows,treatment.rows),unit.variable],
+                          foo[c(control.rows,treatment.rows),time.variable])         
+        if( length(unique(balcheck)) != 1 || unique(balcheck)!= 1)
       {
-        stop("\nYour panel is unbalanced (units, times). Balance units & times.\n")
+        stop("\n Your panel, as described by unit.variable and time.variable, is unbalanced. Balance it and run again.\n")
       }
 
      # Now check and get time identifiers
@@ -493,3 +489,4 @@ dataprep<-
   return(invisible(output))
 
 }
+

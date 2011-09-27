@@ -15,7 +15,7 @@ of the synthetic control method with the synth library.}
 \usage{basque}
 \format{A panel dataframe made up of 18 units: 1 treated (no 17; the Basque country) and 16 control regions (no. 2-16,18).
 Region no. 1 is the average for the whole country of Spain. 1 outcome variable (gdpcap). 13 predictor variables 
-(6 sectoral production shares, 6 highest eductional attainment categories, population density, and the investment rate).
+(6 sectoral production shares, 6 highest educational attainment categories, population density, and the investment rate).
 Region names and numbers are stored in regionno and regionname. 42 time periods (1955 - 1997).
 All columns have self-explanatory column names. For reference the variables are:
 \itemize{
@@ -45,7 +45,11 @@ total production.
 }
 }
 \source{Abadie, A. and Gardeazabal, J. (2003) Economic Costs of Conflict: A Case Study of the Basque Country 
-            \emph{American Economic Review} 93 (1) 113--132.}
+            \emph{American Economic Review} 93 (1) 113--132.
+            
+        Abadie, A., Diamond, A., Hainmueller, J. (2011). Synth: An R Package for Synthetic Control Methods in Comparative 
+Case Studies. \emph{Journal of Statistical Software} 42 (13) 1--17.
+}
 
-\keyword{datasets}
+
 

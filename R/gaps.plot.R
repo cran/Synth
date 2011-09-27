@@ -1,5 +1,4 @@
-"gaps.plot" <-
-
+gaps.plot <-
 function(
                       synth.res = NA,
                       dataprep.res = NA,
@@ -93,3 +92,4 @@ function(
                      abline(v=tr.intake,col="black",lty="dotted",lwd=2)
            
             }
+

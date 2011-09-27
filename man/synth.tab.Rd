@@ -37,13 +37,7 @@ Case Studies. \emph{Journal of Statistical Software} 42 (13) 1--17.
 
             }
    
-\author{Alexis Diamond \email{adiamond@fas.harvard.edu} Jens Hainmueller \email{jhainm@fas.harvard.edu}}\note{NA}
-\seealso{ \code{gaps.plot},\code{synth.plot},\code{dataprep},\code{synth.tab} }
-\examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--    or do  help(data=index)  for the standard data sets.
-
-## The function is currently defined as
+\author{Jens Hainmueller and Alexis Dimaond}
+\seealso{\code{\link{synth}}, \code{\link{dataprep}}, \code{\link{gaps.plot}}, \code{\link{path.plot}}
 }
-\keyword{methods}
+

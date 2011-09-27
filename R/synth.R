@@ -1,15 +1,18 @@
-# Function Synth: JH 9/11/08
-"synth" <-
-  function(           data.prep.obj = NULL,
+synth <-
+function(           data.prep.obj = NULL,
                       X1 = NULL,
                       X0 = NULL,
                       Z0 = NULL,
                       Z1 = NULL,
                       custom.v = NULL,
+                      optimxmethod = c("Nelder-Mead","BFGS"),
+                      genoud = FALSE,
+                      quadopt = "ipop",
                       Margin.ipop = 0.0005,
                       Sigf.ipop = 5,
                       Bound.ipop = 10,
-                      genoud = FALSE,...
+                      verbose = FALSE,
+                       ...
                       )
   { 
     # Retrieve dataprep objects
@@ -91,15 +94,16 @@
         )
 
       rgV.genoud <- genoud(
-                             fn.V, # function to be optimized
-                             nvarsV, # number of par values
-                             margin.ipop = Margin.ipop,
-                             sigf.ipop = Sigf.ipop,
-                             bound.ipop = Bound.ipop,
+                             fn.V, 
+                             nvarsV, 
                              X0.scaled = X0.scaled,
                              X1.scaled = X1.scaled,
                              Z0 = Z0,
-                             Z1 = Z1,...
+                             Z1 = Z1,
+                             quadopt = quadopt,
+                             margin.ipop = Margin.ipop,
+                             sigf.ipop = Sigf.ipop,
+                             bound.ipop = Bound.ipop
                              )
       SV1 <- rgV.genoud$par  # and use these as starting values
 
@@ -112,19 +116,26 @@
       SV1 <- rep(1/nvarsV,nvarsV)
       }
       
-      # now we run optim
-      rgV.optim.1 <- optim(SV1, fn.V,
-                           margin.ipop = Margin.ipop,
-                           sigf.ipop = Sigf.ipop,
-                           bound.ipop = Bound.ipop,
-                           X0.scaled = X0.scaled,
-                           X1.scaled = X1.scaled,
-                           Z0 = Z0,
-                           Z1 = Z1,...
-                           )
-
-
-
+      # now we run optimization
+      all.methods <- FALSE
+      if(sum(optimxmethod %in% c("All"))==1){ all.methods <- TRUE }
+     rgV.optim.1 <- optimx(par=SV1, fn=fn.V,
+                             gr=NULL, hess=NULL, 
+                             method=optimxmethod, itnmax=NULL, hessian=FALSE,
+                             control=list(kkt=FALSE,dowarn=FALSE,all.methods=all.methods),
+                             X0.scaled = X0.scaled,
+                             X1.scaled = X1.scaled,
+                             Z0 = Z0,
+                             Z1 = Z1,
+                             quadopt = quadopt,
+                             margin.ipop = Margin.ipop,
+                             sigf.ipop = Sigf.ipop,
+                             bound.ipop = Bound.ipop
+                            )
+      # get minimum
+      if(verbose==TRUE){print(rgV.optim.1)}
+      rgV.optim.1 <- collect.optimx(rgV.optim.1,"min")
+      
       # second set of starting values: regression method 
       # will sometimes not work because of collinear Xs
       # so it's wrapped in a try command
@@ -145,20 +156,28 @@
         SV2  <- diag(V)
         SV2 <- SV2 / sum(SV2)
   
-      rgV.optim.2 <- optim(SV2, fn.V, 
-                           margin.ipop = Margin.ipop,
-                           sigf.ipop = Sigf.ipop,
-                           bound.ipop = Bound.ipop,
-                           X0.scaled = X0.scaled,
-                           X1.scaled = X1.scaled,
-                           Z0 = Z0,
-                           Z1 = Z1,...
-                           )
+      rgV.optim.2 <- optimx(par=SV1, fn=fn.V,
+                             gr=NULL, hess=NULL, 
+                             method=optimxmethod, itnmax=NULL, hessian=FALSE,
+                             control=list(kkt=FALSE,dowarn=FALSE,all.methods=all.methods),
+                             X0.scaled = X0.scaled,
+                             X1.scaled = X1.scaled,
+                             Z0 = Z0,
+                             Z1 = Z1,
+                             quadopt = quadopt,
+                             margin.ipop = Margin.ipop,
+                             sigf.ipop = Sigf.ipop,
+                             bound.ipop = Bound.ipop
+                            )
+      # get minimum
+      if(verbose==TRUE){print(rgV.optim.2)}
+      rgV.optim.2 <- collect.optimx(rgV.optim.2,"min")
+  
       # ouput
+      if(verbose == TRUE){
       cat("\n Equal weight loss is:",rgV.optim.1$value,"\n")
       cat("\n Regression Loss is:",rgV.optim.2$value,"\n")
-      
-          
+      }       
       # and keep the better optim results    
       if(rgV.optim.1$value < rgV.optim.2$value) 
        {
@@ -170,7 +189,6 @@
      
       # final V weights from optimization
       solution.v   <- abs(rgV.optim$par)/sum(abs(rgV.optim$par))
-     
      } else { # jump here if only optimize over W
 
 
@@ -198,7 +216,7 @@
 
 
     # last step: now recover solution.w
-    V <- diag(solution.v)
+    V <- diag(x=as.numeric(solution.v),nrow=nvarsV,ncol=nvarsV)
     H <- t(X0.scaled) %*% V %*% (X0.scaled)
     a <- X1.scaled
     c <- -1*c(t(a) %*% V %*% (X0.scaled) )
@@ -208,12 +226,20 @@
     u <- rep(1, length(c))
     r <- 0
 
+     if(quadopt=="ipop"){
     res <- ipop(c = c, H = H, A = A, b = b, l = l, u = u, r = r,
                 margin = Margin.ipop, maxiter = 1000, sigf = Sigf.ipop, bound = Bound.ipop)
-
     solution.w <- as.matrix(primal(res))
-    rownames(solution.w) <- colnames(X0)
+    } else {
+    # LowRankQP
+     if(quadopt=="LowRankQP"){
+      res <- LowRankQP(Vmat=H,dvec=c,Amat=A,bvec=1,uvec=rep(1,length(c)),method="LU")
+      solution.w <- as.matrix(res$alpha)
+     } 
+    }
 
+    rownames(solution.w) <- colnames(X0)
+    colnames(solution.w) <- "w.weight"
     names(solution.v) <- rownames(X0)
 
     loss.w <- t(X1.scaled - X0.scaled %*% solution.w) %*%
@@ -247,3 +273,4 @@
     return(invisible(optimize.out))
 
   }
+

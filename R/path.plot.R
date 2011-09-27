@@ -1,5 +1,5 @@
 path.plot <-
-             function(
+function(
                       synth.res = NA,
                       dataprep.res = NA,
                       tr.intake = NA,
@@ -115,3 +115,4 @@ path.plot <-
                      }
             
      }
+

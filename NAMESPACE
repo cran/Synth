@@ -1,0 +1,8 @@
+import(kernlab)
+import(optimx)
+export(synth, dataprep, gaps.plot, path.plot, synth.tab, fn.V, spec.pred.func, collect.optimx)
+
+
+
+
+

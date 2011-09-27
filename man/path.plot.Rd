@@ -3,7 +3,7 @@
 \title{Plots Outcome Trajectories for Treated Unit and its Synthetic Control Unit}
 \description{
   This function plots the trajectories of the outcome variable for the treated unit and the 
-  synthetic control group constructed by \code{\link{synth}} and \code{\link{dataprep}}. The user can specifify whether the whole 
+  synthetic control group constructed by \code{\link{synth}} and \code{\link{dataprep}}. The user can specify whether the whole 
   time period or only the pretreatment period should be plotted. 
 }
 \usage{
@@ -43,10 +43,6 @@ Case Studies. \emph{Journal of Statistical Software} 42 (13) 1--17.
 
             }
    
-\author{Alexis Diamond \email{adiamond@fas.harvard.edu} Jens Hainmueller \email{jhainm@fas.harvard.edu}}\note{NA}
-\seealso{ \code{gaps.plot},\code{synth.plot},\code{dataprep},\code{synth.tab} }
-
-\examples{
-##---- NA ----
+\author{Jens Hainmueller and Alexis Diamond}
+\seealso{\code{\link{dataprep}}, \code{\link{gaps.plot}}, \code{\link{synth}}, \code{\link{synth.tab}}
 }
-\keyword{methods}

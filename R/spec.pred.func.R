@@ -1,4 +1,5 @@
-spec.pred.func <- function(
+spec.pred.func <-
+function(
                            list.object = NULL,
                            tr.numb = NULL,
                            co.numb = NULL,
@@ -146,3 +147,4 @@ spec.pred.func <- function(
     return(invisible(special.output))
 
   }
+

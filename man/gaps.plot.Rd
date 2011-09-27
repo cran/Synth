@@ -2,7 +2,7 @@
 \alias{gaps.plot}
 \title{Plots Gap in Outcome Trajectories between the Treated its Synthetic Control Unit}
 \description{ This function plots the gaps in the trajectories of the outcome variable for the treated unit and the 
-  synthetic control group constructed by \code{\link{synth}} and \code{\link{dataprep}}. The user can specifify whether
+  synthetic control group constructed by \code{\link{synth}} and \code{\link{dataprep}}. The user can specify whether
   the whole time period or only the pre-treatment period should be plotted.
 }
 \usage{gaps.plot(synth.res = NA,
@@ -41,10 +41,7 @@ Case Studies. \emph{Journal of Statistical Software} 42 (13) 1--17.
 
             }
    
-\author{Alexis Diamond \email{adiamond@fas.harvard.edu} Jens Hainmueller \email{jhainm@fas.harvard.edu}}\note{NA}
-\seealso{ \code{gaps.plot},\code{synth.plot},\code{dataprep},\code{synth.tab} }
-\examples{
-##---- NA ----
+\author{Jens Hainmueller and Alexis Diamond}
+\seealso{\code{\link{dataprep}}, \code{\link{synth}}, \code{\link{path.plot}}, \code{\link{synth.tab}}
 }
-\keyword{methods}
 
