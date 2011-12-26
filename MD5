@@ -1,4 +1,4 @@
-659b3ff9b6c7ad3a03c3fe078b66d7dc *DESCRIPTION
+e72c74fa5c5e7fc0f51ec9c29aeda7c7 *DESCRIPTION
 36157b52c9e48871249ca333cba2bfc7 *LICENSE
 8901dd3e7b9d52de870d3753b9a2d8ac *NAMESPACE
 c331d764bbb7c3908b256e8dd032dabb *R/collect.optimx.R
@@ -9,7 +9,7 @@ c294008b4c3627d505735f4c9a510b21 *R/path.plot.R
 a435c90ca5ae9d86cbd7a4c8285ff7ed *R/spec.pred.func.R
 68b8889f6f6cabdeda93167db0d3cd81 *R/synth.R
 d42b3ca872a3ad565de715d201e0cd60 *R/synth.tab.R
-2156f1071a729b225dd8febc54dd6e6d *R/zzz.R
+44e127fd561a14d6c36ee35e40f0696b *R/zzz.R
 dda5ea7f06119addd90369c68a264673 *data/basque.RData
 4ebad766b658ec550e20fd09e3817426 *data/basque.rda
 36a73d364850c62cd864dacd52f4e613 *data/synth.data.RData
