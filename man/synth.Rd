@@ -131,6 +131,7 @@ Jens Hainmueller and Alexis Diamond
 ## Notice the various matrix extractions below;
 ## these are all taken care of by running dataprep() first.
 
+\donttest{
 # load data
 data(basque)
 
@@ -218,5 +219,6 @@ legend("topleft",legend=c("Basque","Synthetic Basque"),col=c("black","red"),lty=
 
 ## to run placebo studies, simply re-run synth
 ## and change the treated unit or time of intervention (see references for details)
+}
 }
 

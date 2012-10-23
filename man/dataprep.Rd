@@ -110,6 +110,7 @@ Case Studies. \emph{Journal of Statistical Software} 42 (13) 1--17.
 \seealso{ \code{\link{synth}}, \code{\link{gaps.plot}}, \code{\link{path.plot}}, \code{\link{synth.tab}} 
 }
 \examples{
+\donttest{
 data(synth.data)
 
  dataprep.out <-
@@ -178,6 +179,8 @@ gaps.plot(dataprep.res = dataprep.out,synth.res = synth.out)
 ## Second example: The economic impact of terrorism in the
 ## Basque country using data from Abadie and Gardeazabal (2003)
 ## see JSS paper in the references details
+}
+\donttest{
 data(basque)
 
 # dataprep: prepare data for synth
@@ -257,6 +260,6 @@ gaps.plot(synth.res = synth.out,
           Xlab = c("year"), 
           Ylim = c(-1.5,1.5), 
           )
-
+}
 }
 

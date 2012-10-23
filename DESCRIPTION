@@ -1,22 +1,26 @@
 Package: Synth
-Version: 1.1-2
-Date: 2011-12-26
+Version: 1.1-3
+Date: 2012-10-23
 Title: Synthetic Control Group Method for Comparative Case Studies
-Author: Jens Hainmueller <jhainm@mit.edu> and Alexis Diamond <adiamond@fas.harvard.edu>
+Author: Jens Hainmueller <jhainm@mit.edu> and Alexis Diamond
+        <adiamond@fas.harvard.edu>
 Maintainer: Jens Hainmueller <jhainm@mit.edu>
-Description: Implements the synthetic control group method for comparative case studies 
-             developed in Abadie and Gardeazabal (2003) and Abadie, Diamond, and Hainmueller (2010). 
-			 The synthetic control method allows for effect estimation in settings where a 
-			 single unit (a state, country, firm, etc.) is exposed to an event or intervention. 
-			 It provides a data-driven procedure to construct synthetic control units based on a weighted 
-			 combination of comparison units that approximates the characteristics of 
-			 the unit that is exposed to the intervention. A combination of comparison units 
-			 often provides a better comparison for the unit exposed to the intervention than
-             any comparison unit alone.
+Description: Implements the synthetic control group method for
+        comparative case studies developed in Abadie and Gardeazabal
+        (2003) and Abadie, Diamond, and Hainmueller (2010).  The
+        synthetic control method allows for effect estimation in
+        settings where a single unit (a state, country, firm, etc.) is
+        exposed to an event or intervention.  It provides a data-driven
+        procedure to construct synthetic control units based on a
+        weighted combination of comparison units that approximates the
+        characteristics of the unit that is exposed to the
+        intervention. A combination of comparison units often provides
+        a better comparison for the unit exposed to the intervention
+        than any comparison unit alone.
 Imports: kernlab, optimx
 Suggests: rgenoud, LowRankQP
 License: GPL (>= 3)
 URL: http://www.mit.edu/~jhainm/software.htm
-Packaged: 2011-12-27 00:54:59 UTC; jhainmueller
+Packaged: 2012-10-24 12:15:18 UTC; jhainmueller
 Repository: CRAN
-Date/Publication: 2011-12-27 10:06:00
+Date/Publication: 2012-10-24 12:31:17

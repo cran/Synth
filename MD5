@@ -1,4 +1,4 @@
-e72c74fa5c5e7fc0f51ec9c29aeda7c7 *DESCRIPTION
+c51ee6f7ae17e0559ec34a8425477481 *DESCRIPTION
 36157b52c9e48871249ca333cba2bfc7 *LICENSE
 8901dd3e7b9d52de870d3753b9a2d8ac *NAMESPACE
 c331d764bbb7c3908b256e8dd032dabb *R/collect.optimx.R
@@ -7,7 +7,7 @@ a69f248f45e929e3c4cdbce4daf6b3fe *R/fn.V.R
 562cdcc9608c4e91a76f666ee4f60e03 *R/gaps.plot.R
 c294008b4c3627d505735f4c9a510b21 *R/path.plot.R
 a435c90ca5ae9d86cbd7a4c8285ff7ed *R/spec.pred.func.R
-68b8889f6f6cabdeda93167db0d3cd81 *R/synth.R
+9e78fee2116dc5020ebfb108c1be1c3f *R/synth.R
 d42b3ca872a3ad565de715d201e0cd60 *R/synth.tab.R
 44e127fd561a14d6c36ee35e40f0696b *R/zzz.R
 dda5ea7f06119addd90369c68a264673 *data/basque.RData
@@ -17,11 +17,11 @@ dda5ea7f06119addd90369c68a264673 *data/basque.RData
 0c4a48e143ccebcf31f2e9f67181f85a *inst/CITATION
 e8318ff3a74b7a50e0a7ba6a606acc2c *man/basque.Rd
 dbba84d602df95c6eaa708d1d2c2361d *man/collect.optimx.Rd
-5ca4f4d01af4b9af9d1c40c9bb318b5d *man/dataprep.Rd
+b6b393091aa3f81103f8304ff1b25312 *man/dataprep.Rd
 918e2b812df8b25da71eae99ee9c7e27 *man/fn.V.Rd
 9862d43ec7ee7b3a2ea7c03d5e1209da *man/gaps.plot.Rd
 a3a794a14ff8fb7bfa6efcea78c5a491 *man/path.plot.Rd
 562dce58b1ffe0184c2d913a5e57ec00 *man/spec.pred.func.Rd
-f03712364afd5d0614ccace867adca05 *man/synth.Rd
+1e8224ee6716639d78ab7d138d1be30d *man/synth.Rd
 b25ead87ade8998aadc4f3dfff59e99b *man/synth.data.Rd
 9afa4a91c0688c355914ef043c7f9624 *man/synth.tab.Rd

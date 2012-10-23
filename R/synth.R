@@ -156,7 +156,7 @@ function(           data.prep.obj = NULL,
         SV2  <- diag(V)
         SV2 <- SV2 / sum(SV2)
   
-      rgV.optim.2 <- optimx(par=SV1, fn=fn.V,
+      rgV.optim.2 <- optimx(par=SV2, fn=fn.V,
                              gr=NULL, hess=NULL, 
                              method=optimxmethod, itnmax=NULL, hessian=FALSE,
                              control=list(kkt=FALSE,dowarn=FALSE,all.methods=all.methods),
