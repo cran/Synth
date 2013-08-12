@@ -1,28 +1,25 @@
 collect.optimx <-
 function(res,opt="min"){ 
-# opt can be "min" or "max"
-# number of methods
-reslist <- attr(res, "details")
-m       <- length(reslist)
-pars    <- length(reslist[[1]]$par)
 
-store   <- matrix(NA,ncol=pars+1,nrow=m)
-colnames(store) <- c(paste("par",1:pars,sep=""),"fvalues")
-for(i in 1:m){
-store[i,1:pars] <- reslist[[i]]$par
-if(is.null(reslist[[i]]$value)){reslist[[i]]$value <- NA}
-store[i,"fvalues"] <- reslist[[i]]$value
-}
-out.list    <- data.frame(store)
-if(opt=="max"){
-optm <- which(out.list$fvalues==max(out.list$fvalues,na.rm=TRUE))
-}
+# reorder dataframe for best solution
 if(opt=="min"){
-optm <- which(out.list$fvalues==min(out.list$fvalues,na.rm=TRUE))
+  res <- res[order(res$value,decreasing=FALSE),]
 }
-opt.par    <- out.list[optm,1:pars]
-opt.fvalue <- out.list[optm,"fvalues"]
-out <- list(out.list=out.list,par=opt.par,value=opt.fvalue)
-return(out)
+if(opt=="max"){
+  res <- res[order(res$value,decreasing=TRUE),]
+}
+ 
+# index for value
+val <- which(colnames(res)=="value") 
+# index for pars
+pars <- 1:(val-1)
+
+# extract best solution
+out <- list(out.list=res,
+            par=res[1,pars],
+            value=res[1,val]
+            )
+return(invisible(out))
+
 }
 

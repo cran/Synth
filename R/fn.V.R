@@ -21,7 +21,8 @@ function(
   
     # rescale par
     #V <- diag( abs(variables.v)/sum(abs(variables.v)) )
-    V <- diag(x=as.numeric(abs(variables.v)/sum(abs(variables.v))),nrow=length(variables.v),ncol=length(variables.v))
+    V <- diag(x=as.numeric(abs(variables.v)/sum(abs(variables.v))),
+              nrow=length(variables.v),ncol=length(variables.v))
     
     # set up QP problem
     H <- t(X0.scaled) %*% V %*% (X0.scaled)
@@ -54,6 +55,7 @@ function(
 
     loss.v <- as.numeric(t(Z1 - Z0 %*% solution.w) %*%
       ( Z1 - Z0 %*% solution.w ))
+    loss.v <- loss.v/nrow(Z0)
 
     return(invisible(loss.v))
   }

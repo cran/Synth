@@ -7,7 +7,16 @@
   time period or only the pretreatment period should be plotted. 
 }
 \usage{
-path.plot(synth.res = NA,dataprep.res = NA,tr.intake = NA,Ylab = c("Y Axis"),Xlab = c("Time"),Ylim = NA,Legend=c("Treated","Synthetic"),Legend.position=c("topright"),Main = NA,Z.plot = FALSE)
+path.plot(synth.res = NA,
+dataprep.res = NA,
+tr.intake = NA,
+Ylab = c("Y Axis"),
+Xlab = c("Time"),
+Ylim = NA,
+Legend=c("Treated","Synthetic"),
+Legend.position=c("topright"),
+Main = NA,
+Z.plot = FALSE)
 }
 \arguments{
   \item{synth.res}{Output list created by \code{\link{synth}}.}

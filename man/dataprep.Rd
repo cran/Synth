@@ -111,59 +111,71 @@ Case Studies. \emph{Journal of Statistical Software} 42 (13) 1--17.
 }
 \examples{
 \donttest{
+## The usual sequence of commands is:
+## 1. dataprep() for matrix-extraction
+## 2. synth() for the construction of the synthetic control group
+## 3. synth.tab(), gaps.plot(), and path.plot() to summarize the results
+## Below we provide two examples.
+
+## First Example: Toy panel dataset
+
+# load data
 data(synth.data)
 
- dataprep.out <-
-                  dataprep(
-                           foo = synth.data,
-                           predictors = c("X1", "X2", "X3"),
-                           predictors.op = "mean",
-                           dependent = "Y",
-                           unit.variable = "unit.num",
-                           time.variable = "year",
-                           special.predictors = list(
-                                                    list("Y", 1991, "mean"),
-                                                    list("Y", 1985, "mean"),
-                                                    list("Y", 1980, "mean")
-                                                    ),
-                           treatment.identifier = 7,
-                           controls.identifier = c(29, 2, 13, 17, 32, 38),
-                           time.predictors.prior = c(1984:1989),
-                           time.optimize.ssr = c(1984:1990),
-                           unit.names.variable = "name",
-                           time.plot = 1984:1996
-                           )
+# create matrices from panel data that provide inputs for synth()
+dataprep.out<-
+  dataprep(
+   foo = synth.data,
+   predictors = c("X1", "X2", "X3"),
+   predictors.op = "mean",
+   dependent = "Y",
+   unit.variable = "unit.num",
+   time.variable = "year",
+   special.predictors = list(
+      list("Y", 1991, "mean"),
+      list("Y", 1985, "mean"),
+      list("Y", 1980, "mean")
+                            ),
+   treatment.identifier = 7,
+   controls.identifier = c(29, 2, 13, 17, 32, 38),
+   time.predictors.prior = c(1984:1989),
+   time.optimize.ssr = c(1984:1990),
+   unit.names.variable = "name",
+   time.plot = 1984:1996
+   )
 
-
-## then we run the synth command to identify optimal
-## weights-- the optimal way to aggregate information about all the
-## control units in such a way as to create the best possible synthetic
+## run the synth command to identify the weights
+## that create the best possible synthetic 
 ## control unit for the treated.
 synth.out <- synth(dataprep.out)
 
-## then we want to summarize the results, both numerically and graphically
 ## there are two ways to summarize the results
 ## we can either access the output from synth.out directly
-## eg.
 round(synth.out$solution.w,2)
 # contains the unit weights or
 synth.out$solution.v 
 ## contains the predictor weights. 
 
-## the output from synth opt can be flexibly combined with 
-## the output from dataprep to compute other quantities of interest
-## for example, the period by period discrepancies between the 
+## the output from synth opt 
+## can be flexibly combined with 
+## the output from dataprep to 
+## compute other quantities of interest
+## for example, the period by period 
+## discrepancies between the 
 ## treated unit and its synthetic control unit
 ## can be computed by typing
 gaps<- dataprep.out$Y1plot-(
-                           dataprep.out$Y0plot\%*\%synth.out$solution.w
-                           ) ; gaps
+        dataprep.out$Y0plot\%*\%synth.out$solution.w
+        ) ; gaps
 
-## the Synth package also offers three convenience functions to summarize results.
+## also there are three convenience functions to summarize results.
 ## to get summary tables for all information 
-## (V and W weights plus balance btw. treated and synthetic control) use the 
+## (V and W weights plus balance btw. 
+## treated and synthetic control) use the 
 ## synth.tab() command
-synth.tables <- synth.tab(dataprep.res = dataprep.out,synth.res = synth.out)
+synth.tables <- synth.tab(
+      dataprep.res = dataprep.out,
+      synth.res = synth.out)
 print(synth.tables)
 
 ## to get summary plots for outcome trajectories 
@@ -176,61 +188,74 @@ path.plot(dataprep.res = dataprep.out,synth.res = synth.out)
 ## plot the gaps (treated - synthetic)
 gaps.plot(dataprep.res = dataprep.out,synth.res = synth.out)
 
+}
+\donttest{
 ## Second example: The economic impact of terrorism in the
 ## Basque country using data from Abadie and Gardeazabal (2003)
 ## see JSS paper in the references details
-}
-\donttest{
+
 data(basque)
 
 # dataprep: prepare data for synth
 dataprep.out <-
-                  dataprep(
-                            foo = basque
-                           ,predictors    = c(
-                                               "school.illit","school.prim","school.med","school.high","school.post.high" 
-                                               ,"invest"
-                                               )
-                           ,predictors.op = c("mean")
-                           ,dependent     = c("gdpcap")
-                           ,unit.variable = c("regionno")
-                           ,time.variable = c("year")
-                           ,special.predictors = list(
-                                                      list("gdpcap",           1960:1969,       c("mean")),                            
-                                                      list("sec.agriculture",         seq(1961,1969,2),c("mean")),
-                                                      list("sec.energy",        seq(1961,1969,2),c("mean")),
-                                                      list("sec.industry",          seq(1961,1969,2),c("mean")),
-                                                      list("sec.construction",       seq(1961,1969,2),c("mean")),                                                      
-                                                      list("sec.services.venta",   seq(1961,1969,2),c("mean")),
-                                                      list("sec.services.nonventa",seq(1961,1969,2),c("mean")), 
-                                                      list("popdens",             1969,            c("mean"))
-                                                      )
-                           ,treatment.identifier  = 17
-                           ,controls.identifier   = c(2:16,18)
-                           ,time.predictors.prior = c(1964:1969)
-                           ,time.optimize.ssr     = c(1960:1969)
-                           ,unit.names.variable   = c("regionname")
-                           ,time.plot                = c(1955:1997) 
-                           )
+  dataprep(
+  foo = basque
+  ,predictors= c("school.illit",
+                 "school.prim",
+                 "school.med",
+                 "school.high",
+                 "school.post.high"
+                 ,"invest"
+                 )
+   ,predictors.op = c("mean")
+   ,dependent     = c("gdpcap")
+   ,unit.variable = c("regionno")
+   ,time.variable = c("year")
+   ,special.predictors = list(
+    list("gdpcap",1960:1969,c("mean")),                            
+    list("sec.agriculture",seq(1961,1969,2),c("mean")),
+    list("sec.energy",seq(1961,1969,2),c("mean")),
+    list("sec.industry",seq(1961,1969,2),c("mean")),
+    list("sec.construction",seq(1961,1969,2),c("mean")),
+    list("sec.services.venta",seq(1961,1969,2),c("mean")),
+    list("sec.services.nonventa",seq(1961,1969,2),c("mean")),
+    list("popdens",1969,c("mean")))
+    ,treatment.identifier  = 17
+    ,controls.identifier   = c(2:16,18)
+    ,time.predictors.prior = c(1964:1969)
+    ,time.optimize.ssr     = c(1960:1969)
+    ,unit.names.variable   = c("regionname")
+    ,time.plot            = c(1955:1997) 
+    )
 
-# 1. combine highest and second highest schooling category and eliminate highest category
-dataprep.out$X1["school.high",] <- dataprep.out$X1["school.high",] + dataprep.out$X1["school.post.high",]
-dataprep.out$X1                 <- as.matrix(dataprep.out$X1[-which(rownames(dataprep.out$X1)=="school.post.high"),])
-dataprep.out$X0["school.high",] <- dataprep.out$X0["school.high",] + dataprep.out$X0["school.post.high",]
-dataprep.out$X0                 <- dataprep.out$X0[-which(rownames(dataprep.out$X0)=="school.post.high"),]
+# 1. combine highest and second highest 
+# schooling category and eliminate highest category
+dataprep.out$X1["school.high",] <- 
+ dataprep.out$X1["school.high",] + 
+ dataprep.out$X1["school.post.high",]
+dataprep.out$X1                 <- 
+ as.matrix(dataprep.out$X1[
+  -which(rownames(dataprep.out$X1)=="school.post.high"),])
+dataprep.out$X0["school.high",] <- 
+ dataprep.out$X0["school.high",] + 
+ dataprep.out$X0["school.post.high",]
+dataprep.out$X0                 <- 
+dataprep.out$X0[
+ -which(rownames(dataprep.out$X0)=="school.post.high"),]
 
 # 2. make total and compute shares for the schooling catgeories
 lowest  <- which(rownames(dataprep.out$X0)=="school.illit")
 highest <- which(rownames(dataprep.out$X0)=="school.high")
 
-dataprep.out$X1[lowest:highest,] <- (100 * dataprep.out$X1[lowest:highest,]) / sum(dataprep.out$X1[lowest:highest,])
-dataprep.out$X0[lowest:highest,] <-  100 * scale(
-                                                 dataprep.out$X0[lowest:highest,],
-                                                 center=FALSE,
-                                                 scale=colSums(dataprep.out$X0[lowest:highest,])
+dataprep.out$X1[lowest:highest,] <- 
+ (100 * dataprep.out$X1[lowest:highest,]) /
+ sum(dataprep.out$X1[lowest:highest,])
+dataprep.out$X0[lowest:highest,] <-  
+ 100 * scale(dataprep.out$X0[lowest:highest,],
+             center=FALSE,
+             scale=colSums(dataprep.out$X0[lowest:highest,])
                                                  )
     
-
 # run synth
 synth.out <- synth(data.prep.obj = dataprep.out)
 
@@ -260,6 +285,9 @@ gaps.plot(synth.res = synth.out,
           Xlab = c("year"), 
           Ylim = c(-1.5,1.5), 
           )
+          
+## To create the placebo studies simply reassign
+## the intervention to other units or times (see references for details)
 }
 }
 

@@ -74,7 +74,7 @@ function(           data.prep.obj = NULL,
 
 
     # check if custom v weights are supplied or
-    # or if only on predictor is specified,
+    # if only on predictor is specified,
     # we jump to quadratic optimization over W weights
     # if not start optimization over V and W
     if(is.null(custom.v) & nrow(X0) != 1)
@@ -122,7 +122,10 @@ function(           data.prep.obj = NULL,
      rgV.optim.1 <- optimx(par=SV1, fn=fn.V,
                              gr=NULL, hess=NULL, 
                              method=optimxmethod, itnmax=NULL, hessian=FALSE,
-                             control=list(kkt=FALSE,dowarn=FALSE,all.methods=all.methods),
+                             control=list(kkt=FALSE,
+                                          starttests=FALSE,
+                                          dowarn=FALSE,
+                                          all.methods=all.methods),
                              X0.scaled = X0.scaled,
                              X1.scaled = X1.scaled,
                              Z0 = Z0,
@@ -159,7 +162,10 @@ function(           data.prep.obj = NULL,
       rgV.optim.2 <- optimx(par=SV2, fn=fn.V,
                              gr=NULL, hess=NULL, 
                              method=optimxmethod, itnmax=NULL, hessian=FALSE,
-                             control=list(kkt=FALSE,dowarn=FALSE,all.methods=all.methods),
+                             control=list(kkt=FALSE,
+                                          starttests=FALSE,
+                                          dowarn=FALSE,
+                                          all.methods=all.methods),
                              X0.scaled = X0.scaled,
                              X1.scaled = X1.scaled,
                              Z0 = Z0,
@@ -247,15 +253,15 @@ function(           data.prep.obj = NULL,
 
     loss.v <-
       t(Z1 - Z0 %*% as.matrix(solution.w)) %*%
-        (Z1 - Z0 %*% as.matrix(solution.w))
-          
+        (Z1 - Z0 %*% as.matrix(solution.w)) 
+    loss.v <- loss.v/nrow(Z0)      
  
     # produce viewable output
     cat("\n****************",
         "\n****************",
         "\n****************",
-        "\n\nLOSS (V):", loss.v,
-        "\n\nLOSS (W):", loss.w,
+        "\n\nMSPE (LOSS V):", loss.v,
+  #      "\n\nLOSS (W):", loss.w,
         "\n\nsolution.v:\n", round(as.numeric(solution.v), 10),
         "\n\nsolution.w:\n", round(as.numeric(solution.w), 10),
         "\n\n"

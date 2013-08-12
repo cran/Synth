@@ -21,7 +21,7 @@ across the methods.
 }
 
 \value{
-  \item{out.list}{Dataframe with parameter and function values from the different methods.}
+  \item{out.list}{Dataframe with results from the different methods.}
   \item{par}{Parameter values from method that attained minimum/maximum across the methods.}
   \item{value}{Function value from method that attained minimum/maximum across the methods.}
 }

@@ -28,7 +28,16 @@ to the synthetic control unit.
 
 }
 \usage{
-synth(data.prep.obj = NULL, X1 = NULL, X0 = NULL, Z0 = NULL, Z1 = NULL, custom.v = NULL, optimxmethod = c("Nelder-Mead", "BFGS"), genoud = FALSE, quadopt = "ipop", Margin.ipop = 5e-04, Sigf.ipop = 5, Bound.ipop = 10, verbose = FALSE, ...)
+synth(data.prep.obj = NULL,
+X1 = NULL, X0 = NULL, 
+Z0 = NULL, Z1 = NULL, 
+custom.v = NULL, 
+optimxmethod = c("Nelder-Mead", "BFGS"), 
+genoud = FALSE, quadopt = "ipop", 
+Margin.ipop = 5e-04, 
+Sigf.ipop = 5, 
+Bound.ipop = 10, 
+verbose = FALSE, ...)
 }
 \arguments{
   \item{data.prep.obj}{
@@ -110,115 +119,188 @@ Jens Hainmueller and Alexis Diamond
 
 
 \examples{
+
 ## While synth() can be used to construct synthetic control groups
-## directly, by providing a X1,X0,Z1, and Z0 matrix. We strongly
-## recommend to first run dataprep() to setup the data.
-## Two extensive examples illustrating the whole sequence of
-## of commands with:
+## directly, by providing the X1, X0, Z1, and Z0 matrices, we strongly
+## recommend to first run dataprep() to extract these matrices 
+## and pass them to synth() as a single object
+
+## The usual sequence of commands is:
 ## 1. dataprep() for matrix-extraction
 ## 2. synth() for the construction of the synthetic control group
 ## 3. synth.tab(), gaps.plot(), and path.plot() to summarize the results
-## are provided in the examples for the dataprep() function
-## please take a close look there.
-
-## Here we provide a stand-alone example, for synth()
-## that does not require the user to run dataprep first.
-## This example is a generic version of the original estimation
-## of economic impact of terrorism in the Basque country
-## presented in Abadie and Gardeazabal (2003).
-## See the paper for details and the example in dataprep() for the exact replication.
-## Here we just use a subset of the predictors.
-## Notice the various matrix extractions below;
-## these are all taken care of by running dataprep() first.
+## Below we provide two examples
 
 \donttest{
+## First Example: Toy panel dataset
+
 # load data
+data(synth.data)
+
+# create matrices from panel data that provide inputs for synth()
+dataprep.out<-
+  dataprep(
+   foo = synth.data,
+   predictors = c("X1", "X2", "X3"),
+   predictors.op = "mean",
+   dependent = "Y",
+   unit.variable = "unit.num",
+   time.variable = "year",
+   special.predictors = list(
+      list("Y", 1991, "mean"),
+      list("Y", 1985, "mean"),
+      list("Y", 1980, "mean")
+                            ),
+   treatment.identifier = 7,
+   controls.identifier = c(29, 2, 13, 17, 32, 38),
+   time.predictors.prior = c(1984:1989),
+   time.optimize.ssr = c(1984:1990),
+   unit.names.variable = "name",
+   time.plot = 1984:1996
+   )
+
+## run the synth command to identify the weights
+## that create the best possible synthetic 
+## control unit for the treated.
+synth.out <- synth(dataprep.out)
+
+## there are two ways to summarize the results
+## we can either access the output from synth.out directly
+round(synth.out$solution.w,2)
+# contains the unit weights or
+synth.out$solution.v 
+## contains the predictor weights. 
+
+## the output from synth opt 
+## can be flexibly combined with 
+## the output from dataprep to 
+## compute other quantities of interest
+## for example, the period by period 
+## discrepancies between the 
+## treated unit and its synthetic control unit
+## can be computed by typing
+gaps<- dataprep.out$Y1plot-(
+        dataprep.out$Y0plot\%*\%synth.out$solution.w
+        ) ; gaps
+
+## also there are three convenience functions to summarize results.
+## to get summary tables for all information 
+## (V and W weights plus balance btw. 
+## treated and synthetic control) use the 
+## synth.tab() command
+synth.tables <- synth.tab(
+      dataprep.res = dataprep.out,
+      synth.res = synth.out)
+print(synth.tables)
+
+## to get summary plots for outcome trajectories 
+## of the treated and the synthetic control unit use the 
+## path.plot() and the gaps.plot() commands
+
+## plot in levels (treated and synthetic)
+path.plot(dataprep.res = dataprep.out,synth.res = synth.out)
+
+## plot the gaps (treated - synthetic)
+gaps.plot(dataprep.res = dataprep.out,synth.res = synth.out)
+
+}
+\donttest{
+## Second example: The economic impact of terrorism in the
+## Basque country using data from Abadie and Gardeazabal (2003)
+## see JSS paper in the references details
+
 data(basque)
 
-# Construct matrix of predictors
-predictors    = c(
-                  "school.illit","school.prim","school.med","school.high",
-                  "invest","gdpcap","popdens"
-                  )
+# dataprep: prepare data for synth
+dataprep.out <-
+  dataprep(
+  foo = basque
+  ,predictors= c("school.illit",
+                 "school.prim",
+                 "school.med",
+                 "school.high",
+                 "school.post.high"
+                 ,"invest"
+                 )
+   ,predictors.op = c("mean")
+   ,dependent     = c("gdpcap")
+   ,unit.variable = c("regionno")
+   ,time.variable = c("year")
+   ,special.predictors = list(
+    list("gdpcap",1960:1969,c("mean")),                            
+    list("sec.agriculture",seq(1961,1969,2),c("mean")),
+    list("sec.energy",seq(1961,1969,2),c("mean")),
+    list("sec.industry",seq(1961,1969,2),c("mean")),
+    list("sec.construction",seq(1961,1969,2),c("mean")),
+    list("sec.services.venta",seq(1961,1969,2),c("mean")),
+    list("sec.services.nonventa",seq(1961,1969,2),c("mean")),
+    list("popdens",1969,c("mean")))
+    ,treatment.identifier  = 17
+    ,controls.identifier   = c(2:16,18)
+    ,time.predictors.prior = c(1964:1969)
+    ,time.optimize.ssr     = c(1960:1969)
+    ,unit.names.variable   = c("regionname")
+    ,time.plot            = c(1955:1997) 
+    )
 
-# for the treated unit (Basque country)
-# (predictors are averaged for the 1964:1969 period)
-X1 <-
- as.matrix(apply(
-                 basque[
-                        basque$regionname == "Basque Country (Pais Vasco)" &
-                        is.element(basque$year,1964:1969),
-                        predictors
-                       ]
-            ,2,mean,na.rm=TRUE))
+# 1. combine highest and second highest 
+# schooling category and eliminate highest category
+dataprep.out$X1["school.high",] <- 
+ dataprep.out$X1["school.high",] + 
+ dataprep.out$X1["school.post.high",]
+dataprep.out$X1                 <- 
+ as.matrix(dataprep.out$X1[
+  -which(rownames(dataprep.out$X1)=="school.post.high"),])
+dataprep.out$X0["school.high",] <- 
+ dataprep.out$X0["school.high",] + 
+ dataprep.out$X0["school.post.high",]
+dataprep.out$X0                 <- 
+dataprep.out$X0[
+ -which(rownames(dataprep.out$X0)=="school.post.high"),]
 
-# and the control units (other Spanish regions)
-controls <- c(2:16,18)
-X0 <- basque[
-             is.element(basque$regionno,controls) &
-             is.element(basque$year,1964:1969),
-             c(predictors,"regionno")
-             ]
-X0 <- split(X0, X0[,dim(X0)[2]])
-X0 <- sapply(X0, apply, 2, mean, na.rm = TRUE)
-X0 <- as.matrix(X0[-dim(X0)[1],])
+# 2. make total and compute shares for the schooling catgeories
+lowest  <- which(rownames(dataprep.out$X0)=="school.illit")
+highest <- which(rownames(dataprep.out$X0)=="school.high")
 
-# get matrix of pre-intervention values of the outcome variable (GDP)
-# over which mean squared prediction error should be minimized
-# treated unit
-Z1 <-
-  matrix(basque$gdpcap[
-                       is.element(basque$year,1960:1969) &
-                       basque$regionname == "Basque Country (Pais Vasco)"
-                      ])
+dataprep.out$X1[lowest:highest,] <- 
+ (100 * dataprep.out$X1[lowest:highest,]) /
+ sum(dataprep.out$X1[lowest:highest,])
+dataprep.out$X0[lowest:highest,] <-  
+ 100 * scale(dataprep.out$X0[lowest:highest,],
+             center=FALSE,
+             scale=colSums(dataprep.out$X0[lowest:highest,])
+                                                 )
+    
+# run synth
+synth.out <- synth(data.prep.obj = dataprep.out)
 
-Z0 <-
-  matrix(basque$gdpcap[
-                       is.element(basque$year,1960:1969) &
-                       is.element(basque$regionno,controls)
-                      ],ncol=length(controls))
-                      
-rownames(Z0) <- rownames(Z1) <- 1960:1969
-colnames(Z0) <- colnames(X0) <- controls
+# Get result tables
+synth.tables <- synth.tab(
+                          dataprep.res = dataprep.out,
+                          synth.res = synth.out
+                          ) 
 
-# now construct a synthetic basque country
-synth.out <- synth(X1=X1,X0=X0,Z1=Z1,Z0=Z0)
+# results tables:
+print(synth.tables)
 
-# examine the weights associated with each of the control units
-# with region_numbers
-round(synth.out$solution.w,3)
-# or regionnames
-data.frame(round(synth.out$solution.w,3),row.names = unique(basque$regionname)[c(-1,-17)])
+# plot results:
+# path
+path.plot(synth.res = synth.out,
+          dataprep.res = dataprep.out,
+          Ylab = c("real per-capita GDP (1986 USD, thousand)"),
+          Xlab = c("year"), 
+          Ylim = c(0,13), 
+          Legend = c("Basque country","synthetic Basque country"),
+          ) 
 
-# compare the predictor values for the treated unit and its synthetic counterpart
-tab <- cbind(X1,X0\%*\%synth.out$solution.w)
-colnames(tab) <- c("Basque Country","Synthetic Basque country")
-tab
-
-# plot the pre-terrorism trajectory for the treated unit and its synthetic counterpart
-# over with the mean squared prediction error was minimized
-matplot(cbind(1960:1969,1960:1969),
-        cbind(Z1,Z0\%*\%as.matrix(synth.out$solution.w)),type="l",xlab="year",ylab="GDPcap")
-legend("topleft",legend=c("Basque","Synthetic Basque"),col=c("black","red"),lty=c(1,2))
-
-# plot the whole pre and post terrorism period
-Y1 <-
-  matrix(basque$gdpcap[
-                       is.element(basque$year,1955:1997) &
-                       basque$regionname == "Basque Country (Pais Vasco)"
-                      ])
-
-Y0 <-
-  matrix(basque$gdpcap[
-                       is.element(basque$year,1955:1997) &
-                       is.element(basque$regionno,controls)
-                      ],ncol=length(controls))
-matplot(cbind(1955:1997,1955:1997),
-        cbind(Y1,Y0\%*\%as.matrix(synth.out$solution.w)),type="l",xlab="year",ylab="GDPcap",ylim=c(0,11.5))
-legend("topleft",legend=c("Basque","Synthetic Basque"),col=c("black","red"),lty=c(1,2))
-
-## to run placebo studies, simply re-run synth
-## and change the treated unit or time of intervention (see references for details)
+## gaps
+gaps.plot(synth.res = synth.out,
+          dataprep.res = dataprep.out, 
+          Ylab = c("gap in real per-capita GDP (1986 USD, thousand)"),
+          Xlab = c("year"), 
+          Ylim = c(-1.5,1.5), 
+          )
 }
+
 }
 

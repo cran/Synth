@@ -7,7 +7,15 @@ Loss Function for nested optimization of W and V weights
 Loss function for the nested optimization of W and V weights used for constructing synthetic control groups according to the methods outlined in Abadie and Gardeazabal (2003) and Abadie, Diamond, Hainmueller (2010) (see references). This function is called by \code{\link{synth}} internally, and should not be called manually by a normal user.
 }
 \usage{
-fn.V(variables.v = stop("variables.v missing"), X0.scaled = stop("X0.scaled missing"), X1.scaled = stop("X1.scaled missing"), Z0 = stop("Z0 missing"), Z1 = stop("Z1 missing"), margin.ipop = 5e-04, sigf.ipop = 5, bound.ipop = 10, quadopt = "ipop")
+fn.V(variables.v = stop("variables.v missing"),
+X0.scaled = stop("X0.scaled missing"), 
+X1.scaled = stop("X1.scaled missing"), 
+Z0 = stop("Z0 missing"), 
+Z1 = stop("Z1 missing"), 
+margin.ipop = 5e-04, 
+sigf.ipop = 5, 
+bound.ipop = 10, 
+quadopt = "ipop")
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
