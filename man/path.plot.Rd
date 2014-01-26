@@ -2,8 +2,7 @@
 \alias{path.plot}
 \title{Plots Outcome Trajectories for Treated Unit and its Synthetic Control Unit}
 \description{
-  This function plots the trajectories of the outcome variable for the treated unit and the 
-  synthetic control group constructed by \code{\link{synth}} and \code{\link{dataprep}}. The user can specify whether the whole 
+  This function plots the trajectories of the outcome variable for the treated unit and the synthetic control group constructed by \code{\link{synth}} and \code{\link{dataprep}}. The user can specify whether the whole 
   time period or only the pretreatment period should be plotted. 
 }
 \usage{
@@ -38,17 +37,17 @@ Z.plot = FALSE)
 \value{
   The plot of trajectories.
 }
-\references{Abadie, A. and Gardeazabal, J. (2003) Economic Costs of Conflict: A Case Study of the Basque Country 
-            \emph{American Economic Review} 93 (1) 113--132.
-            
-                        
-                        Abadie A, Diamond A, Hainmueller J (2010). Synthetic Control Methods for Comparative
-Case Studies: Estimating the Effect of California's Tobacco Control Program. \emph{Journal of
-the American Statistical Association} 105 (490) 493--505.
-            
-Abadie, A., Diamond, A., Hainmueller, J. (2011). Synth: An R Package for Synthetic Control Methods in Comparative 
-Case Studies. \emph{Journal of Statistical Software} 42 (13) 1--17.
+\references{
 
+Abadie, A., Diamond, A., Hainmueller, J. (2014). Comparative Politics and the Synthetic Control Method. \emph{American Journal of Political Science} Forthcoming 2014.
+
+Synthetic : An R Package for Synthetic Control Methods in Comparative Case Studies. \emph{Journal of Statistical Software} 42 (13) 1--17.
+       
+Abadie, A., Diamond, A., Hainmueller, J. (2011). Synth: An R Package for Synthetic Control Methods in Comparative Case Studies. \emph{Journal of Statistical Software} 42 (13) 1--17.
+
+Abadie A, Diamond A, Hainmueller J (2010). Synthetic Control Methods for Comparative Case Studies: Estimating the Effect of California's Tobacco Control Program. \emph{Journal of the American Statistical Association} 105 (490) 493--505.
+     
+Abadie, A. and Gardeazabal, J. (2003) Economic Costs of Conflict: A Case Study of the Basque Country \emph{American Economic Review} 93 (1) 113--132.
 
             }
    

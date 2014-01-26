@@ -4,8 +4,7 @@
 Collect results from optimx optimization methods
 }
 \description{
-An internal function that collects the results from the different optimization methods run by optimx. 
-It stores the parameter and function values and extracts the results for the best performing method (minimum or maximum).
+An internal function that collects the results from the different optimization methods run by optimx. It stores the parameter and function values and extracts the results for the best performing method (minimum or maximum).
 }
 \usage{
 collect.optimx(res, opt = "min")

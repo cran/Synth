@@ -2,7 +2,7 @@
 \alias{dataprep}
 \title{Constructs a list of matrices from panel dataset to be loaded into synth()}
 \description{
-The \code{\link{synth}} function takes a standard panel dataset and produces a list of data objects necessary for running \code{\link{synth}} and other Synth package functions to construct synthetic control groups according to the methods outlined in            Abadie and Gardeazabal (2003) and Abadie, Diamond, Hainmueller (2010) (see references and example). 
+The \code{\link{synth}} function takes a standard panel dataset and produces a list of data objects necessary for running \code{\link{synth}} and other Synth package functions to construct synthetic control groups according to the methods outlined in Abadie and Gardeazabal (2003) and Abadie, Diamond, Hainmueller (2010, 2011, 2014) (see references and example). 
 
 User supplies a dataframe ("foo"), chooses predictors, special predictors (explained below), the operators that act upon these predictors, the dependent variable, identifies the columns associated with unit numbers, time periods (and unit names, when available), as well as the treated unit, the control units, the time-period over which to select the predictors, the time-period over which to optimize, and the time-period over which outcome data should be plotted.
 
@@ -93,18 +93,19 @@ predicator x2 should be used with its median values over periods 1980:1983; x3 s
   }
   \item{tag}{a list of all arguments in initial function call.}
 }
-\references{Abadie, A. and Gardeazabal, J. (2003) Economic Costs of Conflict: A Case Study of the Basque Country 
-            \emph{American Economic Review} 93 (1) 113--132.
-            
-                        Abadie A, Diamond A, Hainmueller J (2010). Synthetic Control Methods for Comparative
-Case Studies: Estimating the Effect of California's Tobacco Control Program. \emph{Journal of
-the American Statistical Association} 105 (490) 493--505.
-            
-Abadie, A., Diamond, A., Hainmueller, J. (2011). Synth: An R Package for Synthetic Control Methods in Comparative 
-Case Studies. \emph{Journal of Statistical Software} 42 (13) 1--17.
+\references{
 
+Abadie, A., Diamond, A., Hainmueller, J. (2014). Comparative Politics and the Synthetic Control Method. \emph{American Journal of Political Science} Forthcoming 2014.
 
-            }
+Synthetic : An R Package for Synthetic Control Methods in Comparative Case Studies. \emph{Journal of Statistical Software} 42 (13) 1--17.
+       
+Abadie, A., Diamond, A., Hainmueller, J. (2011). Synth: An R Package for Synthetic Control Methods in Comparative Case Studies. \emph{Journal of Statistical Software} 42 (13) 1--17.
+
+Abadie A, Diamond A, Hainmueller J (2010). Synthetic Control Methods for Comparative Case Studies: Estimating the Effect of California's Tobacco Control Program. \emph{Journal of the American Statistical Association} 105 (490) 493--505.
+     
+Abadie, A. and Gardeazabal, J. (2003) Economic Costs of Conflict: A Case Study of the Basque Country \emph{American Economic Review} 93 (1) 113--132.
+  
+}
    
 \author{Jens Hainmueller and Alexis Diamond}
 \seealso{ \code{\link{synth}}, \code{\link{gaps.plot}}, \code{\link{path.plot}}, \code{\link{synth.tab}} 
