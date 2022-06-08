@@ -1,15 +1,14 @@
 Package: Synth
-Version: 1.1-5
-Date: 2014-01-26
+Version: 1.1-6
+Date: 2022-06-08
 Title: Synthetic Control Group Method for Comparative Case Studies
 Author: Jens Hainmueller <jhain@stanford.edu> and Alexis Diamond <adiamond@fas.harvard.edu>
 Maintainer: Jens Hainmueller <jhain@stanford.edu>
 Description: Implements the synthetic control group method for comparative case studies as described in Abadie and Gardeazabal (2003) and Abadie, Diamond, and Hainmueller (2010, 2011, 2014). The synthetic control method allows for effect estimation in settings where a single unit (a state, country, firm, etc.) is exposed to an event or intervention. It provides a data-driven procedure to construct synthetic control units based on a weighted combination of comparison units that approximates the characteristics of the unit that is exposed to the intervention. A combination of comparison units often provides a better comparison for the unit exposed to the intervention than any comparison unit alone.
-Imports: kernlab, optimx
-Suggests: rgenoud, LowRankQP
+Imports: kernlab, optimx,rgenoud, LowRankQP
 License: GPL (>= 2)
-URL: http://www.stanford.edu/~jhain
-Packaged: 2014-01-26 23:13:46 UTC; jhainmueller
+URL: https://web.stanford.edu/~jhain/
 NeedsCompilation: no
+Packaged: 2022-06-08 22:53:58 UTC; jhainmueller
 Repository: CRAN
-Date/Publication: 2014-01-27 00:37:42
+Date/Publication: 2022-06-08 23:30:02 UTC

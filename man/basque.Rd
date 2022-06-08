@@ -12,7 +12,7 @@ The data contains per-capita GDP (the outcome variable), as well as
 population density, sectoral production, investment, and human capital
 (the predictor variables) for the relevant years, and is used here to demonstrate the implementation
 of the synthetic control method with the synth library.}
-\usage{basque}
+\usage{data(basque)}
 \format{A panel dataframe made up of 18 units: 1 treated (no 17; the Basque country) and 16 control regions (no. 2-16,18).
 Region no. 1 is the average for the whole country of Spain. 1 outcome variable (gdpcap). 13 predictor variables 
 (6 sectoral production shares, 6 highest educational attainment categories, population density, and the investment rate).

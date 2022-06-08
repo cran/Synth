@@ -10,12 +10,12 @@ citEntry(entry = "Article",
   volume       = "42",
   number       = "13",
   pages        = "1--17",
-  url          = "http://www.jstatsoft.org/v42/i13/",
+  url          = "https://www.jstatsoft.org/v42/i13/",
 
   textVersion  =
   paste("Alberto Abadie, Alexis Diamond, Jens Hainmueller (2011).",
         "Synth: An R Package for Synthetic Control Methods in Comparative Case Studies.",
         "Journal of Statistical Software, 42(13), 1-17.",
-        "URL http://www.jstatsoft.org/v42/i13/.")
+        "URL https://www.jstatsoft.org/v42/i13/")
 )
 

@@ -43,8 +43,7 @@ function(
     } else {
     # LowRankQP
      if(quadopt=="LowRankQP"){
-      require(LowRankQP)
-      res <- LowRankQP(Vmat=H,dvec=c,Amat=A,bvec=1,uvec=rep(1,length(c)),method="LU")
+      res <- LowRankQP::LowRankQP(Vmat=H,dvec=c,Amat=A,bvec=1,uvec=rep(1,length(c)),method="LU")
       solution.w <- as.matrix(res$alpha)
      } 
     }
