@@ -43,7 +43,7 @@ setting for ipop optimization routine: Clipping bound for the variables (see \co
 }
   \item{quadopt}{
 string vector that specifies the routine for quadratic optimization over w weights. 
-possible values are "ipop" and "LowRankQP"  (see \code{\link[kernlab]{ipop}} and \code{\link[LowRankQP]{LowRankQP}} LowRankQP for details)
+possible values are "ipop"   (see \code{\link[kernlab]{ipop}} for details)
 }
 }
 \value{

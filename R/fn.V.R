@@ -43,8 +43,9 @@ function(
     } else {
     # LowRankQP
      if(quadopt=="LowRankQP"){
-      res <- LowRankQP::LowRankQP(Vmat=H,dvec=c,Amat=A,bvec=1,uvec=rep(1,length(c)),method="LU")
-      solution.w <- as.matrix(res$alpha)
+     # res <- LowRankQP::LowRankQP(Vmat=H,dvec=c,Amat=A,bvec=1,uvec=rep(1,length(c)),method="LU")
+    #  solution.w <- as.matrix(res$alpha)
+       cat("LowRankQP no longer supoorted, please use quadopt==`ipop' instead")
      } 
     }
             

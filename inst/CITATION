@@ -1,21 +1,20 @@
 citHeader("To cite Synth in publications use:")
 
-citEntry(entry = "Article",
-  title        = "{Synth}: An {R} Package for Synthetic Control Methods in Comparative Case Studies",
-  author       = personList(as.person("Alberto Abadie"),
-                   as.person("Alexis Diamond"),
-                   as.person("Jens Hainmueller")),
+bibentry(bibtype = "Article",
+  title        = "Synth: An R Package for Synthetic Control Methods in Comparative Case Studies",
+author = c(
+       person(c("Jens", "Hainmueller", role = c("aut","cre"))),
+       person(c("Alexis", "Diamond", role = c("aut"))),
+       person(c("Alberto", "Abadie", role = c("aut")))
+),
   journal      = "Journal of Statistical Software",
   year         = "2011",
   volume       = "42",
   number       = "13",
   pages        = "1--17",
-  url          = "https://www.jstatsoft.org/v42/i13/",
+  url          = "https://www.jstatsoft.org/v42/i13/"
 
-  textVersion  =
-  paste("Alberto Abadie, Alexis Diamond, Jens Hainmueller (2011).",
-        "Synth: An R Package for Synthetic Control Methods in Comparative Case Studies.",
-        "Journal of Statistical Software, 42(13), 1-17.",
-        "URL https://www.jstatsoft.org/v42/i13/")
 )
+
+
 
